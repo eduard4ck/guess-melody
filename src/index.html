@@ -226,6 +226,28 @@
       <div class="main-stat">У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!</div>
       <span role="button" tabindex="0" class="main-replay">Попробовать ещё раз</span>
     </section>
+
+    <!-- Стрелки -->
+    <div class="arrows__wrap">
+      <style>
+        .arrows__wrap {
+          position: absolute;
+          top: 135px;
+          left: 50%;
+          margin-left: -56px;
+        }
+
+        .arrows__btn {
+          background: none;
+          border: 2px solid black;
+          padding: 5px 20px;
+        }
+
+      </style>
+      <button class="arrows__btn left">◁</button>
+      <button class="arrows__btn right">▷</button>
+    </div>
+
   </template>
 
   <script type="module" src="js/main.min.js"></script>
