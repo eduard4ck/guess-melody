@@ -1,0 +1,14 @@
+parserOptions:
+  sourceType: 'module'
+
+env:
+  es6: true
+  browser: true
+
+extends: 'htmlacademy/es6'
+rules: {
+  "no-return-assign": "off",
+  "no-unused-expressions": "off",
+  "no-invalid-this": "off",
+  "consistent-return": "off"
+}
