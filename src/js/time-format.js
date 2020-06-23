@@ -6,4 +6,4 @@ window.formatTime = (total, passed) => {
     minutes: minutesLeft,
     seconds: secondsLeft
   };
-}; 
+};
