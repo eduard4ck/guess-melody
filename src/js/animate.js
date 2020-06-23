@@ -22,3 +22,4 @@ window.animation = {
     return stopFn;
   }
 };
+

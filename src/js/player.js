@@ -68,4 +68,3 @@ window.initializePlayer = (element, file, autoplay = false, controllable = true)
 
   return () => destroyPlayer(element, state);
 };
-
