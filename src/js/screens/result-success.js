@@ -1,11 +1,9 @@
 import createDom from './create-dom.js';
+import logo from './common/logo';
 
 let resultSuccess = createDom(
     `<section class="main main--result">
-    <section class="logo" title="Угадай мелодию">
-      <h1>Угадай мелодию</h1>
-    </section>
-
+    ${logo()}
     <h2 class="title">Вы настоящий меломан!</h2>
     <div class="main-stat">За&nbsp;3&nbsp;минуты и 25&nbsp;секунд
       <br>вы&nbsp;набрали 12 баллов (8 быстрых)
