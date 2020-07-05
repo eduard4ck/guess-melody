@@ -1,4 +1,5 @@
-import showBlock from './utils/show-block';
-import welcome from './screens/welcome';
+import gameState from './data/game-state';
+import {renderState} from './control/render-controller';
 
-showBlock(welcome());
+gameState.reset();
+renderState();

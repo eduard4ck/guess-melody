@@ -10,14 +10,14 @@ const initialState = Object.freeze({
 
 let gameState = {
   currentState: {},
-  get state() {
+  get now() {
     return this.currentState;
   },
-  set state(newState) {
+  set now(newState) {
     this.currentState = newState;
   },
-  resetState() {
-    Object.freeze(this.currentState, initialState);
+  reset() {
+    return Object.assign(this.currentState, initialState);
   }
 };
 
