@@ -3,12 +3,14 @@ import levelArtist from '../screens/game-artist';
 import levelGenre from '../screens/game-genre';
 import levelSuccess from '../screens/result-success';
 import levelFail from '../screens/result-fail';
+import {nextScreen} from '../control/render-controller';
 
-export default Object.freeze({
+
+const levels = Object.freeze({
   welcome: {
     title: `Правила игры`,
     text: `Правила просты&nbsp;— за&nbsp;5 минут ответить на все вопросы.<br>Ошибиться можно 3 раза.<br>Удачи!`,
-    next: `levelArtist`,
+    next: nextScreen,
   },
   levelArtist: {
     title: `Кто исполняет эту песню?`,
@@ -32,7 +34,7 @@ export default Object.freeze({
         img: `http://placehold.it/134x134`,
       },
     ],
-    next: `levelGenre`,
+    next: nextScreen,
   },
   levelGenre: {
     title: `Выберите инди-рок треки`,
@@ -54,7 +56,7 @@ export default Object.freeze({
         audio: ``,
       },
     ],
-    next: [`resultWin`, `failTime`, `failTries`]
+    next: nextScreen,
   },
   resultWin: {
     title: `Вы настоящий меломан!`,
@@ -70,12 +72,6 @@ export default Object.freeze({
     text: `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`,
     next: `welcome`,
   },
-  statisctic: {
-    title: `Статистика других игроков`,
-    time: 2,
-    rightAnswers: 4,
-    otherPlayersPercent: 80,
-  },
 });
 
 export const levelToRender = new Map([
@@ -85,5 +81,10 @@ export const levelToRender = new Map([
   [`resultWin`, levelSuccess],
   [`failTime`, levelFail],
   [`failTries`, levelFail],
-  [`statisctic`, 123],
 ]);
+
+export function randomFrom2Screens() {
+  return Math.random() < 0.5 ? `levelArtist` : `levelGenre`;
+}
+
+export default levels;

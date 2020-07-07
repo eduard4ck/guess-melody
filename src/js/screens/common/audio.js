@@ -20,9 +20,7 @@ export function audioListeners(module, songContainer) {
       playButton: div.querySelector(`.player-control`),
       onPausePlay(thisAudio, playButton) { // принимает песню и кнопку на неё
         return () => {
-          playButton.classList.contains(`player-control--pause`)
-            ? thisAudio.pause()
-            : thisAudio.play();
+          playButton.classList.contains(`player-control--pause`) ? thisAudio.pause() : thisAudio.play();
           playButton.classList.toggle(`player-control--play`);
           playButton.classList.toggle(`player-control--pause`);
         };

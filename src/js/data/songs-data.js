@@ -5,7 +5,7 @@ export default [
     value: `1`,
     id: `1`,
     img: `http://placehold.it/134x134`,
-    mp3: `/mp3/One_Big_Country_Song.mp3`,
+    mp3: `/mp3/allo.mp3`,
     genre: `Country`
   },
   {
@@ -37,7 +37,7 @@ export default [
   },
   {
     artist: `Riot`,
-    name: `	Level Plane`,
+    name: `Level Plane`,
     value: `5`,
     id: `5`,
     img: `https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQCzEQ57k_T_MA_C45r2PlOebpruc3rBKwUQQ&usqp=CAU`,
@@ -73,11 +73,11 @@ export default [
   }
 ];
 
-export let questions = new Map([
+
+export const questions = new Map([
   [`Выберите инди-рок треки`, `Rock`],
   [`Выберите джазовые треки`, `Jazz`],
   [`Выберите кантри треки`, `Country`],
-  [`Выберите треки стиля R&B`, `Rock`],
-  [`Выберите электронную музыку`, `Rock`],
-  [`Халява, выберай любой трек`, `any`],
+  [`Выберите треки стиля R&B`, `R&B`],
+  [`Выберите электро музыку`, `Electronic`],
 ]);

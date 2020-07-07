@@ -2,20 +2,19 @@
 import gameState from '../data/game-state';
 import {renderState} from '../control/render-controller';
 import data from "../data/data";
-import getRandomItem from '../utils/get-random-item';
 import createDom from '../utils/create-dom';
 import timer from './common/module-timer';
 import mistakes from './common/module-mistake';
 import audio, {audioListeners as addAudioListeners} from "./common/audio";
 
-export default (levelData, trueSong, answerСallback) => {
+export default (levelData, answerСallback) => {
 
   let templateAnswer = (song) => `
     <div class="genre-answer">
       <div class="player-wrapper">
         ${audio(song)}
       </div>
-      <input type="checkbox" name="answer" value="answer-${song.value}" 
+      <input type="checkbox" name="answer" value="answer-${song.value}" alt="${song.genre}"
       id="a-${song.id}">
       <label class="genre-answer-check" for="a-${song.id}"></label>
     </div>`;
@@ -23,7 +22,7 @@ export default (levelData, trueSong, answerСallback) => {
   let template = (state) => `
     <section class="main main--level main--level-genre">
       ${timer}
-      ${mistakes(3)}
+      ${mistakes(gameState.now.lives)}
 
       <div class="main-wrap">
         <h2 class="title">${state.title}</h2>
@@ -35,27 +34,28 @@ export default (levelData, trueSong, answerСallback) => {
     </section>`;
 
   const module3 = createDom(template(levelData)).firstChild;
-
   let form = module3.querySelector(`.genre`);
   let musicNotes = module3.querySelectorAll(`.genre input[name="answer"]`);
   let answerButton = module3.querySelector(`.genre-answer-send`);
   answerButton.disabled = true;
 
-  form.addEventListener(`click`, () => { // проверка есть ли checked песня
-    answerButton.disabled = true;
-    let note = [...musicNotes].some((it) => it.checked);
-    note ? answerButton.disabled = false : false;
+  form.addEventListener(`click`, () => { // проверка, если есть checked песня отключает disabled, иначе - включает
+    let isSelectedNote = [...musicNotes].some((it) => it.checked);
+    answerButton.disabled = isSelectedNote ? false : true;
   });
-  answerButton.addEventListener(`click`, onAnswerClick);
+
+  answerButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    let checkedSongs = [...musicNotes].filter((it) => it.checked);
+    answerСallback(`levelGenre`, levelData.answers, checkedSongs); // проверка правильности ответа
+
+    gameState.currentState.screen = data[gameState.now.screen].next();
+    renderState();
+  });
+
   addAudioListeners(module3, form);
 
   return module3;
 };
 
-function onAnswerClick(evt) {
-  evt.preventDefault();
-  let modules = data[gameState.now.screen].next; // array
-  gameState.currentState.screen = getRandomItem(modules);
-  renderState();
-}
 

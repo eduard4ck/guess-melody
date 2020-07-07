@@ -21,7 +21,7 @@ export default (levelData) => {
   const module1 = createDom(template(levelData)).firstChild;
   const playButton = module1.querySelector(`.main-play`);
   playButton.addEventListener(`click`, () => {
-    gameState.currentState.screen = data[gameState.now.screen].next;
+    gameState.currentState.screen = data[gameState.now.screen].next();
     renderState();
   });
 

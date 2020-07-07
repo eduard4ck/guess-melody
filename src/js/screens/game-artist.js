@@ -21,7 +21,7 @@ export default (levelData, trueSong, answerСallback) => {
   let templateMain = `
     <section class="main main--level main--level-artist">
       ${timer}
-      ${mistakes(2)}
+      ${mistakes(gameState.now.lives)}
       <div class="main-wrap">
         <h2 class="title main-title">${levelData.title}</h2>
         <div class="player-wrapper">${audio(trueSong)}</div>
@@ -35,9 +35,10 @@ export default (levelData, trueSong, answerСallback) => {
   let answersList = module2.querySelector(`.main-list`);
   let playerWrapper = module2.querySelector(`.player-wrapper`);
 
-  answersList.addEventListener(`click`, (evt) => { // слушатель на варианты ответов, картинки в круге
+  answersList.addEventListener(`click`, (evt) => { // слушатель на варианты ответов - картинки в круге
     if (evt.target.classList.contains(`main-answer-r`)) {
-      gameState.currentState.screen = data[gameState.now.screen].next;
+      answerСallback(`levelArtist`, trueSong.id, evt.target.id); // проверка правильности ответа
+      gameState.currentState.screen = data[gameState.now.screen].next();
       renderState();
     }
   });
