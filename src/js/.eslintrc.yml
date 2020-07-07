@@ -10,5 +10,6 @@ rules: {
   "no-return-assign": "off",
   "no-unused-expressions": "off",
   "no-invalid-this": "off",
-  "consistent-return": "off"
+  "consistent-return": "off",
+  "curly": "off"
 }
