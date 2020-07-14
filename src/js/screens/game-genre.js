@@ -1,21 +1,20 @@
 // module3
 import gameState from '../data/game-state';
-import {renderState} from '../control/render-controller';
+import {renderState, isValidAnswer} from '../control/render-controller';
 import data from "../data/data";
 import createDom from '../utils/create-dom';
 import timer from './common/module-timer';
 import mistakes from './common/module-mistake';
 import audio, {audioListeners as addAudioListeners} from "./common/audio";
 
-export default (levelData, answerСallback) => {
+export default (levelData) => {
 
   let templateAnswer = (song) => `
     <div class="genre-answer">
       <div class="player-wrapper">
         ${audio(song)}
       </div>
-      <input type="checkbox" name="answer" value="answer-${song.value}" alt="${song.genre}"
-      id="a-${song.id}">
+      <input type="checkbox" name="answer" value="answer-${song.value}" id="a-${song.id}">
       <label class="genre-answer-check" for="a-${song.id}"></label>
     </div>`;
 
@@ -38,6 +37,7 @@ export default (levelData, answerСallback) => {
   let musicNotes = module3.querySelectorAll(`.genre input[name="answer"]`);
   let answerButton = module3.querySelector(`.genre-answer-send`);
   answerButton.disabled = true;
+  // console.log(levelData.answers.map((it) => it.genre));
 
   form.addEventListener(`click`, () => { // проверка, если есть checked песня отключает disabled, иначе - включает
     let isSelectedNote = [...musicNotes].some((it) => it.checked);
@@ -47,7 +47,12 @@ export default (levelData, answerСallback) => {
   answerButton.addEventListener(`click`, (evt) => {
     evt.preventDefault();
     let checkedSongs = [...musicNotes].filter((it) => it.checked);
-    answerСallback(`levelGenre`, levelData.answers, checkedSongs); // проверка правильности ответа
+    let isAnswerTrue = isValidAnswer(`levelGenre`, levelData, checkedSongs);
+    gameState.now.statisticAnswers.push({
+      'answer': isAnswerTrue,
+      'time': 30
+    });
+    !isAnswerTrue ? gameState.now.lives-- : false;
 
     gameState.currentState.screen = data[gameState.now.screen].next();
     renderState();

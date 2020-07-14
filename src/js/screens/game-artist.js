@@ -1,13 +1,13 @@
 // module2
 import gameState from '../data/game-state';
-import {renderState} from '../control/render-controller';
 import data from "../data/data";
+import {renderState, isValidAnswer} from '../control/render-controller';
 import createDom from '../utils/create-dom';
 import timer from './common/module-timer';
 import mistakes from './common/module-mistake';
 import audio, {audioListeners as addAudioListeners} from "./common/audio";
 
-export default (levelData, trueSong, answerСallback) => {
+export default (levelData, trueSong) => {
 
   let templateAnswer = (song) => `
     <div class="main-answer-wrapper">
@@ -37,7 +37,13 @@ export default (levelData, trueSong, answerСallback) => {
 
   answersList.addEventListener(`click`, (evt) => { // слушатель на варианты ответов - картинки в круге
     if (evt.target.classList.contains(`main-answer-r`)) {
-      answerСallback(`levelArtist`, trueSong.id, evt.target.id); // проверка правильности ответа
+      let isAnswerTrue = isValidAnswer(`levelArtist`, trueSong.id, evt.target.id);
+      gameState.now.statisticAnswers.push({
+        'answer': isAnswerTrue,
+        'time': 30
+      });
+      !isAnswerTrue ? gameState.now.lives-- : false;
+
       gameState.currentState.screen = data[gameState.now.screen].next();
       renderState();
     }

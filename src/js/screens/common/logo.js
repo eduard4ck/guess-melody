@@ -9,4 +9,3 @@ export let onWelcomeRedirect = () => {
   gameState.reset();
   renderState();
 };
-

@@ -41,7 +41,9 @@ let {src, dest} = require('gulp'),
   imagemin = require('gulp-imagemin'),
   plumber = require('gulp-plumber'),
   rollup = require('gulp-better-rollup'),
-  sourcemaps = require('gulp-sourcemaps')
+  sourcemaps = require('gulp-sourcemaps'),
+  mocha = require(`gulp-mocha`),
+  commonjs = require(`rollup-plugin-commonjs`)
 
 
 function browserSync(params) {
@@ -121,6 +123,18 @@ function watchFiles() {
 function clean() {
   return del(path.clean)
 }
+
+gulp.task(`test`, function () {
+  return gulp
+    .src([`src/js/**/*.test.js`])
+    .pipe(rollup({
+      plugins: [
+        commonjs()           // Сообщает Rollup, что модули можно загружать из node_modules
+      ]}, `cjs`))            // Выходной формат тестов — `CommonJS` модуль
+    .pipe(gulp.dest(`build/test`))
+    .pipe(mocha({reporter: `spec`}))
+});
+
 
 let build = gulp.series(clean, gulp.parallel(js, css, html, images, music))
 let watch = gulp.parallel(build, watchFiles, browserSync)

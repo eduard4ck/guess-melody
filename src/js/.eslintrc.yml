@@ -4,6 +4,8 @@ parserOptions:
 env:
   es6: true
   browser: true
+  commonjs: true
+  mocha: true
 
 extends: 'htmlacademy/es6'
 rules: {
@@ -11,5 +13,6 @@ rules: {
   "no-unused-expressions": "off",
   "no-invalid-this": "off",
   "consistent-return": "off",
-  "curly": "off"
+  "curly": "off",
+  "no-nested-ternary": "off"
 }
