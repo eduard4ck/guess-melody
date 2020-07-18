@@ -9,7 +9,7 @@ import {nextScreen} from '../control/render-controller';
 const levels = Object.freeze({
   welcome: {
     title: `Правила игры`,
-    text: `Правила просты&nbsp;— за&nbsp;5 минут ответить на все вопросы.<br>Ошибиться можно 3 раза.<br>Удачи!`,
+    text: `Правила просты&nbsp;— за&nbsp;2 минуты ответить на все вопросы.<br>Ошибиться можно 3 раза.<br>Удачи!`,
     next: nextScreen,
   },
   levelArtist: {

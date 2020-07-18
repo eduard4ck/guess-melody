@@ -2,18 +2,14 @@ export const initialState = Object.freeze({
   screen: `welcome`,
   questions: 10,
   currentQuestion: 0,
-  rightAnswers: 0,
   timer: 120,
-  minutes: 0,
-  seconds: `00`,
   lives: 3,
   mistakes: 0,
-  score: 0,
-  fastScore: 0,
+  scores: 0,
+  fastAnswer: 10, // если ответ быстрее чем за n секунд, значит он быстрый
   place: 0,
-  allPlayers: 0,
   percentage: 0,
-  otherPlayersPercent: 0,
+  statisticAnswers: [],
 });
 
 let gameState = {
@@ -25,8 +21,11 @@ let gameState = {
     this.currentState = newState;
   },
   reset() {
-    return Object.assign(this.currentState, initialState);
+    this.currentState = {};
+    let newInitial = JSON.parse(JSON.stringify(initialState));
+    return Object.assign(this.currentState, newInitial);
   }
 };
 
 export default gameState;
+

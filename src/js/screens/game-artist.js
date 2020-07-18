@@ -1,13 +1,12 @@
 // module2
 import gameState from '../data/game-state';
-import {renderState} from '../control/render-controller';
 import data from "../data/data";
+import {renderState, isValidAnswer} from '../control/render-controller';
 import createDom from '../utils/create-dom';
-import timer from './common/module-timer';
 import mistakes from './common/module-mistake';
 import audio, {audioListeners as addAudioListeners} from "./common/audio";
 
-export default (levelData, trueSong, answerСallback) => {
+export default (levelData, trueSong) => {
 
   let templateAnswer = (song) => `
     <div class="main-answer-wrapper">
@@ -20,7 +19,6 @@ export default (levelData, trueSong, answerСallback) => {
 
   let templateMain = `
     <section class="main main--level main--level-artist">
-      ${timer}
       ${mistakes(gameState.now.lives)}
       <div class="main-wrap">
         <h2 class="title main-title">${levelData.title}</h2>
@@ -34,16 +32,22 @@ export default (levelData, trueSong, answerСallback) => {
   const module2 = createDom(templateMain).firstChild;
   let answersList = module2.querySelector(`.main-list`);
   let playerWrapper = module2.querySelector(`.player-wrapper`);
+  addAudioListeners(module2, playerWrapper);
+  const currentTime = gameState.now.timer; // запоминаем таймер, чтобы потом посчитать сколько времени отвечал
 
   answersList.addEventListener(`click`, (evt) => { // слушатель на варианты ответов - картинки в круге
     if (evt.target.classList.contains(`main-answer-r`)) {
-      answerСallback(`levelArtist`, trueSong.id, evt.target.id); // проверка правильности ответа
+      let isAnswerTrue = isValidAnswer(`levelArtist`, trueSong.id, evt.target.id);
+      gameState.now.statisticAnswers.push({
+        'answer': isAnswerTrue,
+        'time': currentTime - gameState.now.timer
+      });
+      !isAnswerTrue ? gameState.now.lives-- : false;
+
       gameState.currentState.screen = data[gameState.now.screen].next();
       renderState();
     }
   });
-
-  addAudioListeners(module2, playerWrapper);
 
   return module2;
 };
