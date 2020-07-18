@@ -3,7 +3,6 @@ import gameState from '../data/game-state';
 import {renderState, isValidAnswer} from '../control/render-controller';
 import data from "../data/data";
 import createDom from '../utils/create-dom';
-import timer from './common/module-timer';
 import mistakes from './common/module-mistake';
 import audio, {audioListeners as addAudioListeners} from "./common/audio";
 
@@ -20,7 +19,6 @@ export default (levelData) => {
 
   let template = (state) => `
     <section class="main main--level main--level-genre">
-      ${timer}
       ${mistakes(gameState.now.lives)}
 
       <div class="main-wrap">
@@ -37,6 +35,7 @@ export default (levelData) => {
   let musicNotes = module3.querySelectorAll(`.genre input[name="answer"]`);
   let answerButton = module3.querySelector(`.genre-answer-send`);
   answerButton.disabled = true;
+  const currentTime = gameState.now.timer; // запоминаем таймер, чтобы потом посчитать сколько времени отвечал
   // console.log(levelData.answers.map((it) => it.genre));
 
   form.addEventListener(`click`, () => { // проверка, если есть checked песня отключает disabled, иначе - включает
@@ -50,7 +49,7 @@ export default (levelData) => {
     let isAnswerTrue = isValidAnswer(`levelGenre`, levelData, checkedSongs);
     gameState.now.statisticAnswers.push({
       'answer': isAnswerTrue,
-      'time': 30
+      'time': currentTime - gameState.now.timer
     });
     !isAnswerTrue ? gameState.now.lives-- : false;
 

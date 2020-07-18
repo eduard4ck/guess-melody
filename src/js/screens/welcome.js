@@ -3,10 +3,11 @@ import gameState from '../data/game-state';
 import {renderState} from '../control/render-controller';
 import data from "../data/data";
 import createDom from '../utils/create-dom';
+import {startTimerInApp} from './common/module-timer';
 import logo, {onWelcomeRedirect} from './common/logo';
 
-export default (levelData) => {
 
+export default (levelData) => {
   const template = (state) =>`
     <section class="main main--welcome">
       ${logo()}
@@ -22,6 +23,7 @@ export default (levelData) => {
   const playButton = module1.querySelector(`.main-play`);
   playButton.addEventListener(`click`, () => {
     gameState.currentState.screen = data[gameState.now.screen].next();
+    startTimerInApp();
     renderState();
   });
 

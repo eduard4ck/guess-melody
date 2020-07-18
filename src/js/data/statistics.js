@@ -5,7 +5,7 @@ export let allPlayersStatistic = [3, 5, 8, 10, 11];
 export function countScores(answersArray) {
   if (!answersArray || answersArray.constructor !== Array || answersArray.length < initialState.questions) return -1;
   let scores = answersArray.reduce((acc, el) => {
-    acc += el.answer ? (el.time < 30 ? 2 : 1) : -2;
+    acc += el.answer ? (el.time < initialState.fastAnswer ? 2 : 1) : -2;
     return acc;
   }, 0);
   return scores;

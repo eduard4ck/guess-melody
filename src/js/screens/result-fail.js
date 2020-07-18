@@ -1,6 +1,7 @@
 // module5
 import createDom from '../utils/create-dom';
 import logo, {onWelcomeRedirect} from './common/logo';
+import {clearTimerInApp} from './common/module-timer';
 
 export default (state) => {
   let template = `
@@ -17,6 +18,7 @@ export default (state) => {
   let retryText = module5.querySelector(`.main-replay`);
   logotype.addEventListener(`click`, onWelcomeRedirect);
   retryText.addEventListener(`click`, onWelcomeRedirect);
+  clearTimerInApp();
 
   return module5;
 };

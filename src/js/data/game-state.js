@@ -3,21 +3,14 @@ export const initialState = Object.freeze({
   questions: 10,
   currentQuestion: 0,
   timer: 120,
-  minutes: 2,
-  seconds: `15`,
   lives: 3,
   mistakes: 0,
   scores: 0,
-  fastScore: 0,
+  fastAnswer: 10, // если ответ быстрее чем за n секунд, значит он быстрый
   place: 0,
   percentage: 0,
   statisticAnswers: [],
 });
-
-
-// таймер
-// подсчет времени каждой попытки
-// изменен подсчет статистики + тесты
 
 let gameState = {
   currentState: {},

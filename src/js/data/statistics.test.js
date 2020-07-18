@@ -19,8 +19,8 @@ describe(`Check counting scores countScores()`, () => {
     assert.equal(10, countScores(statisticAnswers));
   });
 
-  it(`should return 20 after all right answers with time < 30`, () => {
-    let statisticAnswers = new Array(10).fill(``).map(() => ({answer: true, time: 29}));
+  it(`should return 20 after all right answers with time < 10`, () => {
+    let statisticAnswers = new Array(10).fill(``).map(() => ({answer: true, time: 9}));
     assert.equal(20, countScores(statisticAnswers));
   });
 });
@@ -32,21 +32,20 @@ describe(`Check player statistic result showPlayerResult()`, () => {
     let allPlayersStatistic = [4, 5, 8, 11];
     let currentGameState = {lives: 3, scores: 10, secondsLeft: 10};
     let wait = {place: 2, players: 5, percentage: 60};
-    assert.notStrictEqual(wait, showPlayerResult(allPlayersStatistic, currentGameState));
+    assert.deepStrictEqual(wait, showPlayerResult(allPlayersStatistic, currentGameState));
   });
 
   it(`with some same scores in results, should share the place`, () => {
     let allPlayersStatistic = [1, 2, 3, 4, 5, 8, 10, 10, 11];
     let currentGameState = {lives: 3, scores: 10, secondsLeft: 10};
     let wait = {place: 2, players: 10, percentage: 75};
-    assert.notStrictEqual(wait, showPlayerResult(allPlayersStatistic, currentGameState));
+    assert.deepStrictEqual(wait, showPlayerResult(allPlayersStatistic, currentGameState));
   });
 
   // it(`should return error, if second value is not Object`, () => {
   //   let allPlayersStatistic = [4, 5, 8, 10, 11];
   //   let currentGameState = 7;
-  //   let wait = {place: 4, players: 6, percentage: 33};
-  //   assert.notStrictEqual(wait, showPlayerResult(allPlayersStatistic, currentGameState));
+  //   assert.throws(showPlayerResult(allPlayersStatistic, currentGameState), `Second arg isn't an Object`);
   // });
 
   it(`should return -1, when arguments null, NaN or undefined`, () => {
