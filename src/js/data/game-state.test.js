@@ -3,7 +3,7 @@ import gameState, {initialState} from './game-state';
 
 describe(`Check frozen keys of {initialState}`, () => {
 
-  it(`should return epty array in "statisticAnswers", if gameState reseted`, () => {
+  it(`should return empty array in "statisticAnswers", if gameState reseted`, () => {
     gameState.reset();
     gameState.now.mistakes = 5;
     gameState.now.lives = 55;

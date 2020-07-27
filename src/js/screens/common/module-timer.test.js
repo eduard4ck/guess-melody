@@ -9,13 +9,13 @@ describe(`Check svg animation with different parameters getSvgDash()`, () => {
     assert.equal(0, Math.ceil(getSvgDash(fullTime, currentTime, radius).offset));
   });
 
-  it(`should return full length and 281 in dashoffse`, () => {
+  it(`should return full length and 281 in dashoffset`, () => {
     let fullTime = 150; let currentTime = 74; let radius = 88;
     assert.equal(553, Math.ceil(getSvgDash(fullTime, currentTime, radius).stroke));
     assert.equal(281, Math.ceil(getSvgDash(fullTime, currentTime, radius).offset));
   });
 
-  it(`should return full length and 281 in dashoffse`, () => {
+  it(`should return full length and 4 in dashoffset`, () => {
     let fullTime = 150; let currentTime = 149; let radius = 88;
     assert.equal(553, Math.ceil(getSvgDash(fullTime, currentTime, radius).stroke));
     assert.equal(4, Math.ceil(getSvgDash(fullTime, currentTime, radius).offset));
