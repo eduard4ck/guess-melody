@@ -1,15 +1,8 @@
-// import gameState from './data/game-state';
-// import {renderState} from './control/render-controller';
-
-
-// gameState.reset();
-// renderState();
-
 import welcome from './welcome/welcome';
-import game from './game/game';
-import result from './result/result';
+import Game from './game/game';
+import Result from './result/result';
 
-class App {
+class Router {
   constructor() {}
 
   static showWelcome() {
@@ -17,11 +10,11 @@ class App {
   }
 
   static showGame() {
-    game.init();
+    new Game().init();
   }
 
   static showResult() {
-    result.init();
+    new Result().init();
   }
 
   static init() {
@@ -29,6 +22,7 @@ class App {
   }
 }
 
-App.init();
+Router.init();
 
-export default App;
+export default Router;
+

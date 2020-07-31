@@ -1,27 +1,31 @@
 import WelcomeView from './welcome-view';
-import App from '../main';
+import Router from '../main';
+import Timer from '../common/timer';
 import showBlock from '../utils/show-block';
-import gameData from '../data/game-data1';
-import gameState from '../data/game-state1';
-import statistics from '../data/game-statistics1';
+import gameData from '../data/game-data';
+import gameState from '../data/game-state';
+import statistics from '../data/game-statistics';
 
 
-class Welcome {
-  constructor() {}
-
-  duplicate(object) {
-    return JSON.parse(JSON.stringify(object));
+class WelcomePresenter {
+  constructor() {
+    let screenData = gameData.levels.welcome.clon();
+    this.view = new WelcomeView(screenData);
   }
 
   init() {
     gameState.reset();
     statistics.reset();
-    let screenData = this.duplicate(gameData.levels.welcome);
-    this.view = new WelcomeView(screenData);
-    this.view.onPlayClick = () => App.showGame();
+    this.view.onPlayClick = this.onPlayClick;
     showBlock(this.view.element);
+  }
+
+  onPlayClick() {
+    Router.showGame();
+    this.timer = new Timer();
+    this.timer.init();
   }
 }
 
-let welcome = new Welcome();
+let welcome = new WelcomePresenter();
 export default welcome;

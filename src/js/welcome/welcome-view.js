@@ -1,6 +1,6 @@
 import View from '../view';
-import App from '../main';
-import logo from '../screens/common/logo';
+import Router from '../main';
+import logo from '../common/logo';
 
 export default class WelcomeView extends View {
   constructor(screenData) {
@@ -23,9 +23,9 @@ export default class WelcomeView extends View {
 
   bind() {
     this.playButton = this.element.querySelector(`.main-play`);
-    this.playButton.addEventListener(`click`, this.onPlayClick);
+    this.playButton.addEventListener(`click`, () => this.onPlayClick());
     this.logotype = this.element.querySelector(`.logo`);
-    this.logotype.addEventListener(`click`, App.showWelcome);
+    this.logotype.addEventListener(`click`, Router.showWelcome);
   }
 
   onPlayClick() {}

@@ -1,7 +1,7 @@
 import View from '../view';
-import mistakes from '../screens/common/module-mistake';
-import audio from "../screens/common/audio";
-import gameState from '../data/game-state1';
+import mistakes from '../common/module-mistake';
+import audio from "../common/audio";
+import gameState from '../data/game-state';
 
 
 export default class ViewLevelArtist extends View {
@@ -20,13 +20,13 @@ export default class ViewLevelArtist extends View {
         <h2 class="title main-title">${this.title}</h2>
         <div class="player-wrapper">${audio(this.trueSong)}</div>
         <form class="main-list">
-          ${this.songs.map((song) => this.templateAnswer(song)).join(``)}
+          ${this.songs.map((song) => this._templateAnswer(song)).join(``)}
         </form>
       </div>
     </section>`;
   }
 
-  templateAnswer(song) {
+  _templateAnswer(song) {
     return `
     <div class="main-answer-wrapper">
       <input class="main-answer-r" type="radio" id="answer-${song.id}" name="answer" value="val-${song.value}" />
@@ -46,8 +46,10 @@ export default class ViewLevelArtist extends View {
   bind() {
     this.form = this.element.querySelector(`.main-list`);
     this.playerWrapper = this.element.querySelector(`.player-wrapper`);
+    this.playerDivs = this.element.querySelectorAll(`.player`);
+    this.allPlayButtons = this.element.querySelectorAll(`.player-control`);
     this.form.addEventListener(`click`, (evt) => this.onAnswer(evt));
-    this.playerWrapper.addEventListener(`click`, this.onPlay);
+    this.playerWrapper.addEventListener(`click`, (evt) => this.onPlay(evt));
   }
 
   onAnswer() {}

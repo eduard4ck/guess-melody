@@ -1,31 +1,38 @@
-export const initialState = Object.freeze({
-  screen: `welcome`,
-  questions: 10,
-  currentQuestion: 0,
-  timer: 120,
-  lives: 3,
-  mistakes: 0,
-  scores: 0,
-  fastAnswer: 10, // если ответ быстрее чем за n секунд, значит он быстрый
-  place: 0,
-  percentage: 0,
-  statisticAnswers: [],
-});
-
-let gameState = {
-  currentState: {},
-  get now() {
-    return this.currentState;
-  },
-  set now(newState) {
-    this.currentState = newState;
-  },
-  reset() {
-    this.currentState = {};
-    let newInitial = JSON.parse(JSON.stringify(initialState));
-    return Object.assign(this.currentState, newInitial);
+class GameState {
+  constructor() {
+    this.initialState = Object.freeze({
+      questions: 5,
+      currentQuestion: 0,
+      timer: 10,
+      lives: 3
+    });
+    this._state = {};
   }
-};
 
+  get now() {
+    return this._state;
+  }
+
+  nextQuestion() {
+    this.now.currentQuestion++;
+    return this.now.currentQuestion;
+  }
+
+  tick() {
+    this.now.timer--;
+    return this.now.timer;
+  }
+
+  setLives(answer) {
+    answer === false ? this.now.lives-- : void 0;
+    return this.now.lives;
+  }
+
+  reset() {
+    let newInitial = this.initialState.clon();
+    return Object.assign(this.now, newInitial);
+  }
+}
+
+let gameState = new GameState();
 export default gameState;
-

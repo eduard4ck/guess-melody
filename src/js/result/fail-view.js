@@ -1,5 +1,5 @@
 import View from '../view';
-import logo from '../screens/common/logo';
+import logo from '../common/logo';
 
 export default class FailView extends View {
   constructor(screenData) {

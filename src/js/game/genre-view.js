@@ -1,7 +1,7 @@
 import View from '../view';
-import mistakes from '../screens/common/module-mistake';
-import audio from "../screens/common/audio";
-import gameState from '../data/game-state1';
+import mistakes from '../common/module-mistake';
+import audio from "../common/audio";
+import gameState from '../data/game-state';
 
 
 export default class ViewLevelGenre extends View {
@@ -19,14 +19,14 @@ export default class ViewLevelGenre extends View {
       <div class="main-wrap">
         <h2 class="title">${this.title}</h2>
         <form class="genre">
-          ${this.songs.map((song) => this.templateAnswer(song)).join(``)}
+          ${this.songs.map((song) => this._templateAnswer(song)).join(``)}
           <button class="genre-answer-send" type="submit" disabled>Ответить</button>
         </form>
       </div>
     </section>`;
   }
 
-  templateAnswer(song) {
+  _templateAnswer(song) {
     return `
     <div class="genre-answer">
       <div class="player-wrapper">
@@ -52,19 +52,22 @@ export default class ViewLevelGenre extends View {
     return isAllSongsTrue;
   }
 
-  onCheck() {
-    let isSelectedNote = [...this.musicNotes].some((it) => it.checked);
-    this.answerButton.disabled = isSelectedNote ? false : true;
+  onCheck(target) {
+    if (target.type === `checkbox` && target.name === `answer`) {
+      let isSelectedNote = [...this.musicNotes].some((it) => it.checked);
+      this.answerButton.disabled = isSelectedNote ? false : true;
+    }
   }
 
   bind() {
     this.form = this.element.querySelector(`.genre`);
+    this.playerDivs = this.element.querySelectorAll(`.player`);
+    this.allPlayButtons = this.element.querySelectorAll(`.player-control`);
     this.musicNotes = this.element.querySelectorAll(`.genre input[name="answer"]`);
-    this.playerWrapper = this.element.querySelector(`.player-wrapper`);
     this.answerButton = this.element.querySelector(`button.genre-answer-send`);
 
-    this.form.addEventListener(`click`, () => this.onCheck());
-    this.playerWrapper.addEventListener(`click`, this.onPlay);
+    this.form.addEventListener(`click`, (evt) => this.onCheck(evt.target));
+    this.form.addEventListener(`click`, (evt) => this.onPlay(evt));
     this.answerButton.addEventListener(`click`, (evt) => this.onAnswer(evt));
   }
 

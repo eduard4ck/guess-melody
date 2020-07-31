@@ -11,7 +11,6 @@ export default class AbstractView {
 
   get element() {
     if (!this._element) {
-
       this._element = this.render();
       this.bind();
     }
@@ -26,3 +25,7 @@ export default class AbstractView {
     return div.firstChild;
   }
 }
+
+Object.prototype.clon = function () {
+  return JSON.parse(JSON.stringify(this));
+};
