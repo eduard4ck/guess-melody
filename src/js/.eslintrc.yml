@@ -14,5 +14,6 @@ rules: {
   "no-invalid-this": "off",
   "consistent-return": "off",
   "curly": "off",
-  "no-nested-ternary": "off"
+  "no-nested-ternary": "off",
+  "no-extend-native": "off"
 }
