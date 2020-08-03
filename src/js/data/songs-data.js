@@ -1,5 +1,3 @@
-import getRandomItem, {getRandomInt} from '../utils/get-random-item';
-
 class SongsData {
   constructor() {
     this.songs = [
@@ -84,32 +82,6 @@ class SongsData {
       [`Выберите треки стиля R&B`, `R&B`],
       [`Выберите музыку электро`, `Electronic`],
     ]);
-  }
-
-  getRandomSongs(quantity, genre) {
-    let someSongs = new Set();
-    while (someSongs.size < quantity) {
-      someSongs.add(getRandomItem(this.songs));
-    }
-    someSongs = [...someSongs];
-
-    if (genre) {
-      let isGenreTrue = someSongs.some((song) => song.genre === genre);
-      if (!isGenreTrue) { // если в список не попала песня нужного жанра, добавляем
-        let genreSongs = this.songs.filter((song) => song.genre === genre);
-        let randomSong = getRandomItem(genreSongs);
-        someSongs.splice(getRandomInt(someSongs.length - 1), 1, randomSong);
-      }
-    }
-    return someSongs;
-  }
-
-  getUniqueSong(songs) {
-    return getRandomItem(songs);
-  }
-
-  getRandomQuestion() {
-    return getRandomItem([...this.questions]);
   }
 }
 

@@ -1,8 +1,6 @@
 import Router from '../main';
 import FailView from './fail-view';
 import SuccessView from './success-view';
-import welcome from '../welcome/welcome';
-import gameState from '../data/game-state';
 import gameData from '../data/game-data';
 import statistics from '../data/game-statistics';
 import showBlock from '../utils/show-block';
@@ -13,7 +11,6 @@ class ResultPresenter {
   }
 
   init() {
-    if (welcome.view.timer.view.intervalId !== false) welcome.view.timer.clearTimer();
     this.view.onReplay = this.onReplay;
     showBlock(this.view.element);
   }
@@ -23,17 +20,14 @@ class ResultPresenter {
   }
 
   _getView() {
-    if (gameState.now.timer < 1) {
-      let screenData = gameData.levels.failTime;
-      return new FailView(screenData);
+    if (statistics.now.timer < 1) {
+      return new FailView(gameData.levels.failTime);
     }
 
-    if (gameState.now.lives < 1 && gameState.now.questions - gameState.now.currentQuestion !== 0) {
-      let screenData = gameData.levels.failTries;
-      return new FailView(screenData);
+    if (statistics.now.lives < 1 && statistics.now.questions - statistics.now.currentQuestion !== 0) {
+      return new FailView(gameData.levels.failTries);
     }
-    let screenData = Object.assign({}, gameData.levels.resultWin, statistics.getStat());
-    return new SuccessView(screenData);
+    return new SuccessView(gameData.levels.resultWin);
   }
 }
 

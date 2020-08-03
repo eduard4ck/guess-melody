@@ -1,38 +1,50 @@
 import Router from '../main';
+import GameModel from './game-model';
 import ArtistView from './artist-view';
 import GenreView from './genre-view';
-import gameState from '../data/game-state';
-import gameData from '../data/game-data';
-import songsData from '../data/songs-data';
+import Timer from '../common/timer';
 import statistics from '../data/game-statistics';
 import showBlock from '../utils/show-block';
 
 
 class GamePresenter {
   constructor() {
-    this.view = this._generateLevel();
+    this.timer = new Timer(this.model);
+    this.view = ``;
+  }
+
+  get model() {
+    if (!this._model) {
+      this._model = new GameModel();
+      this._model.reset();
+      statistics.reset();
+    }
+    return this._model;
   }
 
   init() {
-    if (gameState.now.lives < 1 || gameState.now.currentQuestion >= gameState.now.questions) {
+    if (this.model.state.lives < 1 || this.model.state.currentQuestion >= this.model.state.questions) {
+      statistics.pushState(this.model.state);
+      this.timer.clearTimer();
       return Router.showResult();
     }
+    if (!this.timer.intervalId) this.timer.init();
+
+    this.view = this._generateLevel();
     this.view.onPlay = this.onPlay.bind(this);
-    this.view.onAnswer = this.onAnswer;
-    this.view.currentTime = gameState.now.timer;
-    gameState.nextQuestion();
+    this.view.onAnswer = this.onAnswer.bind(this);
+    this.view.currentTime = this.model.state.timer;
+    this.model.nextQuestion();
     showBlock(this.view.element);
-    // console.log(statistics.now.statisticAnswers);
   }
 
   onAnswer(evt) {
-    let isAnswerTrue = this.checkValidAnswer(evt);
+    let isAnswerTrue = this.view.checkValidAnswer(evt);
     if (typeof isAnswerTrue === `undefined`) return;
-    statistics.pushAnswer(isAnswerTrue, this.currentTime - gameState.now.timer);
-    gameState.setLives(isAnswerTrue);
-    Router.showGame();
+    statistics.pushAnswer(isAnswerTrue, this.view.currentTime - this.model.state.timer);
+    this.model.setLives(isAnswerTrue);
+    this.init();
   }
-
 
   onPlay(evt) {
     let cls = evt.target.classList;
@@ -47,7 +59,7 @@ class GamePresenter {
       }
 
       song.audio.volume = 0.2;
-      song.playOrPause();
+      song.pauseOrPlay();
 
       song.audio.addEventListener(`ended`, () => song.onEnded());
       this.view._playingSong = !song.audio.paused ? song : null; // записываем играющую песню
@@ -55,18 +67,7 @@ class GamePresenter {
   }
 
   _generateLevel() {
-    if (Math.random() < 0.5) {
-      let screenData = gameData.levels.levelGenre.clon();
-      [screenData.title, screenData.genre] = songsData.getRandomQuestion();
-      screenData.answers = songsData.getRandomSongs(screenData.answers.length, screenData.genre);
-      // console.log(screenData.answers.map((song) => song.genre));
-      return new GenreView(screenData);
-    } else {
-      let screenData = gameData.levels.levelArtist.clon();
-      screenData.answers = songsData.getRandomSongs(screenData.answers.length);
-      screenData.trueSong = songsData.getUniqueSong(screenData.answers);
-      return new ArtistView(screenData);
-    }
+    return this.model.getSomeScreen(ArtistView, GenreView);
   }
 
   _getSongObject(div) {
@@ -74,7 +75,7 @@ class GamePresenter {
     return {
       audio: div.querySelector(`audio`),
       playButton: div.querySelector(`.player-control`),
-      playOrPause() {
+      pauseOrPlay() {
         this.playButton.classList.contains(`player-control--pause`) ? this.audio.pause() : this.audio.play();
         this.playButton.classList.toggle(`player-control--play`);
         this.playButton.classList.toggle(`player-control--pause`);
@@ -87,7 +88,7 @@ class GamePresenter {
       }
     };
   }
+
 }
 
 export default GamePresenter;
-

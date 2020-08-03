@@ -1,22 +1,23 @@
 import View from '../view';
 import Result from '../result/result';
 import showBlock from '../utils/show-block';
-import gameState from '../data/game-state';
+import {initialState} from '../data/game-data';
+import statistics from '../data/game-statistics';
 
 
 class TimerView extends View {
-  constructor() {
+  constructor(modelState) {
     super();
-    this.intervalId = false;
+    this.modelState = modelState;
   }
 
   get minText() {
-    let timer = gameState.now.timer;
+    let timer = this.modelState.timer;
     return timer / 60 < 10 ? `0${Math.trunc(timer / 60)}` : Math.trunc(timer / 60);
   }
 
   get secText() {
-    let timer = gameState.now.timer;
+    let timer = this.modelState.timer;
     return timer % 60 < 10 ? `0${timer % 60}` : timer % 60;
   }
 
@@ -49,8 +50,10 @@ class TimerView extends View {
 
 
 export default class TimerPresenter {
-  constructor() {
-    this.view = new TimerView();
+  constructor(model) {
+    this.intervalId = false;
+    this.model = model;
+    this.view = new TimerView(model.state);
   }
 
   init() {
@@ -61,23 +64,24 @@ export default class TimerPresenter {
   }
 
   clearTimer() {
-    clearInterval(this.view.intervalId); this.view.intervalId = false;
+    clearInterval(this.intervalId); this.intervalId = false;
     let svg = this.view.app.querySelector(`svg.timer`);
     let divClock = this.view.app.querySelector(`div.timer-value`);
     svg.remove(); divClock.remove();
   }
 
   _start() {
-    this.view.intervalId = setInterval(() => {
-      let timer = gameState.tick();
+    this.intervalId = setInterval(() => {
+      let timer = this.model.tick();
       [this.view.min.textContent, this.view.sec.textContent] = [this.view.minText, this.view.secText];
 
-      let dash = this._paintSvgDash(gameState.initialState.timer, timer, this.view.svgCircle.r.baseVal.value);
+      let dash = this._paintSvgDash(initialState.timer, timer, this.view.svgCircle.r.baseVal.value);
       this.view.svgCircle.style.strokeDasharray = dash.stroke;
       this.view.svgCircle.style.strokeDashoffset = dash.offset;
 
       if (timer < 0) {
         this.clearTimer();
+        statistics.now.timer = timer;
         new Result().init();
       }
     }, 1000);

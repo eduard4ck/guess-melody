@@ -1,21 +1,14 @@
 import View from '../view';
 import logo from '../common/logo';
+import statistics from '../data/game-statistics';
+import {initialState} from '../data/game-data';
+import declension from '../utils/word-declension';
 
 export default class SuccessView extends View {
   constructor(screenData) {
     super();
     this.title = screenData.title;
-    this.scores = screenData.scores;
-    this.mistakes = screenData.mistakes;
-    this.place = screenData.place;
-    this.players = screenData.players;
-    this.percentage = screenData.percentage;
-    this.minNumber = screenData.minNumber;
-    this.secNumber = screenData.secNumber;
-    this.minText = screenData.minText;
-    this.secText = screenData.secText;
-    this.ball = screenData.ball;
-    this.oshibok = screenData.oshibok;
+    this.getStatisticData();
   }
 
   get template() {
@@ -30,6 +23,28 @@ export default class SuccessView extends View {
         Это&nbsp;лучше чем у&nbsp;${this.percentage}%&nbsp;игроков</span>
       <span role="button" tabindex="0" class="main-replay">Сыграть ещё раз</span>
     </section>`;
+  }
+
+  getStatisticData() {
+    let sortedArray = statistics.allPlayersStatistic.slice();
+    sortedArray.push(statistics.countScores());
+    sortedArray.sort((left, right) => left - right);
+
+    let sortedSet = Array.from(new Set(sortedArray));
+    let index = [...sortedSet].findIndex((el) => el === statistics.now.scores);
+
+    let timePassed = initialState.timer - statistics.now.timer;
+    this.scores = statistics.now.scores;
+    this.mistakes = initialState.lives - statistics.now.lives;
+    this.place = sortedSet.length - index;
+    this.players = sortedArray.length;
+    this.percentage = Math.trunc(index / sortedSet.length * 100);
+    this.minNumber = Math.trunc((timePassed) / 60);
+    this.secNumber = (timePassed) % 60;
+    this.minText = declension(this.minNumber, [`минуту`, `минуты`, `минут`]);
+    this.secText = declension((timePassed) % 60, [`секунду`, `секунды`, `секунд`]);
+    this.ball = declension(this.scores, [`балл`, `балла`, `баллов`]);
+    this.oshibok = declension(this.mistakes, [`ошибку`, `ошибки`, `ошибок`]);
   }
 
   bind() {

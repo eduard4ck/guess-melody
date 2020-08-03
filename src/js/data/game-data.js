@@ -65,4 +65,13 @@ class GameData {
 }
 
 const gameData = new GameData();
-export default gameData;
+
+const initialState = Object.freeze({
+  questions: 10,
+  currentQuestion: 0,
+  timer: 120,
+  lives: 3
+});
+
+
+export {gameData as default, initialState};
