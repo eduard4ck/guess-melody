@@ -1,14 +1,18 @@
 import View from '../view';
 import logo from '../common/logo';
-import statistics from '../data/game-statistics';
 import {initialState} from '../data/game-data';
-import declension from '../utils/word-declension';
+import {declension} from '../utils';
 
 export default class SuccessView extends View {
   constructor(screenData) {
     super();
     this.title = screenData.title;
-    this.getStatisticData();
+    this.scores = screenData.scores;
+    this.mistakes = screenData.mistakes;
+    this.place = screenData.place;
+    this.players = screenData.players;
+    this.percentage = screenData.percentage;
+    this.getStatisticData(screenData.timer);
   }
 
   get template() {
@@ -25,24 +29,12 @@ export default class SuccessView extends View {
     </section>`;
   }
 
-  getStatisticData() {
-    let sortedArray = statistics.allPlayersStatistic.slice();
-    sortedArray.push(statistics.countScores());
-    sortedArray.sort((left, right) => left - right);
-
-    let sortedSet = Array.from(new Set(sortedArray));
-    let index = [...sortedSet].findIndex((el) => el === statistics.now.scores);
-
-    let timePassed = initialState.timer - statistics.now.timer;
-    this.scores = statistics.now.scores;
-    this.mistakes = initialState.lives - statistics.now.lives;
-    this.place = sortedSet.length - index;
-    this.players = sortedArray.length;
-    this.percentage = Math.trunc(index / sortedSet.length * 100);
-    this.minNumber = Math.trunc((timePassed) / 60);
-    this.secNumber = (timePassed) % 60;
+  getStatisticData(timerNow) {
+    let passedTime = initialState.timer - timerNow;
+    this.minNumber = Math.trunc((passedTime) / 60);
+    this.secNumber = (passedTime) % 60;
     this.minText = declension(this.minNumber, [`минуту`, `минуты`, `минут`]);
-    this.secText = declension((timePassed) % 60, [`секунду`, `секунды`, `секунд`]);
+    this.secText = declension((passedTime) % 60, [`секунду`, `секунды`, `секунд`]);
     this.ball = declension(this.scores, [`балл`, `балла`, `баллов`]);
     this.oshibok = declension(this.mistakes, [`ошибку`, `ошибки`, `ошибок`]);
   }

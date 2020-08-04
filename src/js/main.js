@@ -4,81 +4,57 @@ import Result from './result/result';
 
 
 /** @enum {string} */
-// const Url = {
-//   WELCOME: ``,
-//   GAME: `game`,
-//   FAIL: `fail`,
-//   STATS: `stats`
-// };
-
-// const getUrlFromHash = (hash) => hash.replace(`#`, ``);
-
-// class Router {
-//   constructor() {
-//     this.routes = {
-//       [Url.WELCOME]: welcome,
-//       [Url.GAME]: Game,
-//       [Url.FAIL]: Result,
-//       [Url.STATISTIC]: Result,
-//     };
-
-//     window.onhashchange = () => {
-//       this.changeController(getUrlFromHash(location.hash));
-//     };
-//   }
-
-//   changeController(route = ``) {
-//     let Controller = this.routes[route];
-//     new Controller.init();
-//   }
-
-//   static showWelcome() {
-//     // location.hash = Url.WELCOME;
-//     let welcome = new WelcomePresenter();
-//     showBlock(welcome.element);
-//   }
-
-//   static showGame() {
-//     let game = new GamePresenter(new GameModel(gameState, statistics));
-//     showBlock(game.element);
-//     game.init();
-//   }
-
-//   static showResult() {
-//     let result = new ResultPresenter();
-//     showBlock(result.element);
-//   }
-
-//   static init() {
-//     this.showWelcome();
-//   }
-// }
-
-// const app = new Router();
-// app.init();
-// export default app;
+const Url = {
+  WELCOME: ``,
+  GAME: `game`,
+  STATS: `stats`,
+};
 
 
-class Router {
+export default class Router {
   constructor() {}
 
   static showWelcome() {
-    new Welcome().init();
+    location.hash = Url.WELCOME;
   }
 
   static showGame() {
-    new Game().init();
+    location.hash = Url.GAME;
   }
 
-  static showResult() {
-    new Result().init();
+  static showResult({timer, scores, mistakes, place, players, percentage}) {
+    let necessary = {timer, scores, mistakes, place, players, percentage};
+    let enc = btoa(JSON.stringify(necessary));
+    location.hash = `${Url.STATS}?=${enc}`;
   }
 
   static init() {
-    this.showWelcome();
+    this.changeController(this.getIDFromHash(location.hash));
+    window.onhashchange = () => this.changeController(this.getIDFromHash(location.hash));
+  }
+
+  static getIDFromHash(hash) {
+    return hash.replace(`#`, ``);
+  }
+
+  static changeController(route = ``) {
+    let routes = {
+      [Url.WELCOME]: Welcome,
+      [Url.GAME]: Game,
+    };
+
+    if (typeof routes[route] === `undefined`) {
+      let enc = route.split(`stats?=`);
+      if (enc.length === 2) {
+        let dec = JSON.parse(atob(enc[1]));
+        return new Result(dec).init();
+      }
+      route = ``;
+    }
+
+    let Controller = routes[route];
+    new Controller().init();
   }
 }
 
 Router.init();
-export default Router;
-

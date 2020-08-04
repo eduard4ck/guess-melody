@@ -1,10 +1,11 @@
 import Router from '../main';
+import Result from '../result/result';
 import GameModel from './game-model';
 import ArtistView from './artist-view';
 import GenreView from './genre-view';
 import Timer from '../common/timer';
 import statistics from '../data/game-statistics';
-import showBlock from '../utils/show-block';
+import {showBlock} from '../utils';
 
 
 class GamePresenter {
@@ -16,26 +17,32 @@ class GamePresenter {
   get model() {
     if (!this._model) {
       this._model = new GameModel();
-      this._model.reset();
       statistics.reset();
     }
     return this._model;
   }
 
   init() {
-    if (this.model.state.lives < 1 || this.model.state.currentQuestion >= this.model.state.questions) {
-      statistics.pushState(this.model.state);
+    let mst = this.model.state;
+
+    if (mst.lives < 1 && mst.questions - mst.currentQuestion !== 0) {
       this.timer.clearTimer();
-      return Router.showResult();
+      return new Result().init(`failView`);
     }
-    if (!this.timer.intervalId) this.timer.init();
+
+    if (mst.currentQuestion >= mst.questions) {
+      statistics.pushState(mst);
+      this.timer.clearTimer();
+      return Router.showResult(statistics.now);
+    }
 
     this.view = this._generateLevel();
     this.view.onPlay = this.onPlay.bind(this);
     this.view.onAnswer = this.onAnswer.bind(this);
-    this.view.currentTime = this.model.state.timer;
+    this.view.currentTime = mst.timer;
     this.model.nextQuestion();
     showBlock(this.view.element);
+    if (!this.timer.intervalId) this.timer.init();
   }
 
   onAnswer(evt) {

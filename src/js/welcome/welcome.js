@@ -1,7 +1,7 @@
 import Router from '../main';
 import WelcomeView from './welcome-view';
-import showBlock from '../utils/show-block';
 import gameData from '../data/game-data';
+import {showBlock} from '../utils';
 
 
 export default class WelcomePresenter {

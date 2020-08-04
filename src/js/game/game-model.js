@@ -1,10 +1,11 @@
 import gameData, {initialState} from '../data/game-data';
 import songsData from '../data/songs-data';
-import getRandomItem, {getRandomInt} from '../utils/get-random-item';
+import {getRandomItem, getRandomInt} from '../utils';
 
 export default class GameModel {
   constructor() {
     this._state = {};
+    this.reset();
   }
 
   get state() {

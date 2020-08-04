@@ -1,8 +1,6 @@
 import View from '../view';
 import Result from '../result/result';
-import showBlock from '../utils/show-block';
 import {initialState} from '../data/game-data';
-import statistics from '../data/game-statistics';
 
 
 class TimerView extends View {
@@ -57,22 +55,20 @@ export default class TimerPresenter {
   }
 
   init() {
-    this.view.app = document.querySelector(`body .app`);
-    let cb = (dom, appendTo) => appendTo.prepend(dom);
-    showBlock(this.view.element, this.view.app, cb);
+    this.view.main = document.querySelector(`body .app .main`);
+    this.view.main.prepend(this.view.element);
     this._start();
   }
 
   clearTimer() {
     clearInterval(this.intervalId); this.intervalId = false;
-    let svg = this.view.app.querySelector(`svg.timer`);
-    let divClock = this.view.app.querySelector(`div.timer-value`);
-    svg.remove(); divClock.remove();
   }
 
   _start() {
     this.intervalId = setInterval(() => {
+      !this._isTimerExist() ? this.clearTimer() : void 0;
       let timer = this.model.tick();
+
       [this.view.min.textContent, this.view.sec.textContent] = [this.view.minText, this.view.secText];
 
       let dash = this._paintSvgDash(initialState.timer, timer, this.view.svgCircle.r.baseVal.value);
@@ -81,16 +77,21 @@ export default class TimerPresenter {
 
       if (timer < 0) {
         this.clearTimer();
-        statistics.now.timer = timer;
-        new Result().init();
+        new Result().init(`failTime`);
       }
     }, 1000);
   }
 
-  _paintSvgDash(fullTime, currentTime, radius) {
+  _isTimerExist() {
+    let svg = this.view.main.querySelector(`svg.timer`);
+    let divClock = this.view.main.querySelector(`div.timer-value`);
+    return (svg && divClock) ? true : false;
+  }
+
+  _paintSvgDash(totalTime, passedTime, radius) {
     let stroke = 2 * Math.PI * radius;
-    let offsetStep = stroke / fullTime;
-    let offset = (fullTime - currentTime) * offsetStep;
+    let offsetStep = stroke / totalTime;
+    let offset = (totalTime - passedTime) * offsetStep;
     return {stroke, offset};
   }
 }
