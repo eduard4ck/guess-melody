@@ -1,5 +1,5 @@
-import View from '../view';
 import Router from '../main';
+import View from '../view';
 import logo from '../common/logo';
 
 export default class WelcomeView extends View {

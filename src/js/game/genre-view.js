@@ -1,7 +1,6 @@
 import View from '../view';
 import mistakes from '../common/module-mistake';
 import audio from "../common/audio";
-import gameState from '../data/game-state';
 
 
 export default class ViewLevelGenre extends View {
@@ -10,12 +9,13 @@ export default class ViewLevelGenre extends View {
     this.title = screenData.title;
     this.songs = screenData.answers;
     this.genre = screenData.genre;
+    this.lives = screenData.lives;
   }
 
   get template() {
     return `
     <section class="main main--level main--level-genre">
-      ${mistakes(gameState.now.lives)}
+      ${mistakes(this.lives)}
       <div class="main-wrap">
         <h2 class="title">${this.title}</h2>
         <form class="genre">

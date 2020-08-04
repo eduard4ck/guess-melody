@@ -1,5 +1,7 @@
 import View from '../view';
 import logo from '../common/logo';
+import {initialState} from '../data/game-data';
+import {declension} from '../utils';
 
 export default class SuccessView extends View {
   constructor(screenData) {
@@ -10,12 +12,7 @@ export default class SuccessView extends View {
     this.place = screenData.place;
     this.players = screenData.players;
     this.percentage = screenData.percentage;
-    this.minNumber = screenData.minNumber;
-    this.secNumber = screenData.secNumber;
-    this.minText = screenData.minText;
-    this.secText = screenData.secText;
-    this.ball = screenData.ball;
-    this.oshibok = screenData.oshibok;
+    this.getStatisticData(screenData.timer);
   }
 
   get template() {
@@ -30,6 +27,16 @@ export default class SuccessView extends View {
         Это&nbsp;лучше чем у&nbsp;${this.percentage}%&nbsp;игроков</span>
       <span role="button" tabindex="0" class="main-replay">Сыграть ещё раз</span>
     </section>`;
+  }
+
+  getStatisticData(timerNow) {
+    let passedTime = initialState.timer - timerNow;
+    this.minNumber = Math.trunc((passedTime) / 60);
+    this.secNumber = (passedTime) % 60;
+    this.minText = declension(this.minNumber, [`минуту`, `минуты`, `минут`]);
+    this.secText = declension((passedTime) % 60, [`секунду`, `секунды`, `секунд`]);
+    this.ball = declension(this.scores, [`балл`, `балла`, `баллов`]);
+    this.oshibok = declension(this.mistakes, [`ошибку`, `ошибки`, `ошибок`]);
   }
 
   bind() {

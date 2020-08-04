@@ -1,28 +1,60 @@
-import welcome from './welcome/welcome';
+import Welcome from './welcome/welcome';
 import Game from './game/game';
 import Result from './result/result';
 
-class Router {
+
+/** @enum {string} */
+const Url = {
+  WELCOME: ``,
+  GAME: `game`,
+  STATS: `stats`,
+};
+
+
+export default class Router {
   constructor() {}
 
   static showWelcome() {
-    welcome.init();
+    location.hash = Url.WELCOME;
   }
 
   static showGame() {
-    new Game().init();
+    location.hash = Url.GAME;
   }
 
-  static showResult() {
-    new Result().init();
+  static showResult({timer, scores, mistakes, place, players, percentage}) {
+    let necessary = {timer, scores, mistakes, place, players, percentage};
+    let enc = btoa(JSON.stringify(necessary));
+    location.hash = `${Url.STATS}?=${enc}`;
   }
 
   static init() {
-    this.showWelcome();
+    this.changeController(this.getIDFromHash(location.hash));
+    window.onhashchange = () => this.changeController(this.getIDFromHash(location.hash));
+  }
+
+  static getIDFromHash(hash) {
+    return hash.replace(`#`, ``);
+  }
+
+  static changeController(route = ``) {
+    let routes = {
+      [Url.WELCOME]: Welcome,
+      [Url.GAME]: Game,
+    };
+
+    if (typeof routes[route] === `undefined`) {
+      let enc = route.split(`stats?=`);
+      if (enc.length === 2) {
+        let dec = JSON.parse(atob(enc[1]));
+        return new Result(dec).init();
+      }
+      route = ``;
+    }
+
+    let Controller = routes[route];
+    new Controller().init();
   }
 }
 
 Router.init();
-
-export default Router;
-
