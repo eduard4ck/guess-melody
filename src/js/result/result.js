@@ -7,7 +7,7 @@ import {showBlock} from '../utils';
 class ResultPresenter {
   constructor(screenData) {
     if (screenData) {
-      let data = Object.assign({}, gameData.levels.resultWin, screenData);
+      let data = Object.assign({}, gameData.resultWin, screenData);
       this.view = new SuccessView(data);
     }
   }
@@ -23,11 +23,8 @@ class ResultPresenter {
   }
 
   _getView(screen) {
-    const SCREEN = {
-      failTime: new FailView(gameData.levels.failTime),
-      failView: new FailView(gameData.levels.failTries),
-    };
-    return SCREEN[screen];
+    // screen принимает только 'failTries' или 'failTime'
+    return new FailView(gameData[screen]);
   }
 }
 

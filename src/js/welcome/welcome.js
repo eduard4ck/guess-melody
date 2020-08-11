@@ -6,7 +6,7 @@ import {showBlock} from '../utils';
 
 export default class WelcomePresenter {
   constructor() {
-    let screenData = gameData.levels.welcome.clon();
+    let screenData = gameData.welcome.clon();
     this.view = new WelcomeView(screenData);
   }
 

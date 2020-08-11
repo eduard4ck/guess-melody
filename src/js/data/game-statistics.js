@@ -52,6 +52,7 @@ class GameStatistics {
     s.place = sortedSet.length - index;
     s.players = sortedArray.length;
     s.percentage = Math.trunc(index / sortedSet.length * 100);
+
   }
 
   _countScores() {

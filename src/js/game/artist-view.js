@@ -39,7 +39,8 @@ export default class ViewLevelArtist extends View {
 
   checkValidAnswer(evt) {
     if (evt.target.classList.contains(`main-answer-r`)) {
-      return evt.target.id.endsWith(this.trueSong.id) ? true : false;
+      let selectedSong = this.songs.find((el) => evt.target.id.endsWith(el.id));
+      return selectedSong.isCorrect ? true : false;
     }
   }
 

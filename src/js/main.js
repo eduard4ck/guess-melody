@@ -1,6 +1,9 @@
+import Model from './model';
 import Welcome from './welcome/welcome';
 import Game from './game/game';
 import Result from './result/result';
+import Preloader from './common/preloader';
+import gameAdapter from './data/game-adapter';
 
 
 /** @enum {string} */
@@ -11,37 +14,57 @@ const Url = {
 };
 
 
-export default class Router {
-  constructor() {}
+class Router {
+  constructor() {
+    this.preloader = new Preloader(`body`);
+    this.preloader.show();
 
-  static showWelcome() {
+    this.model = new class extends Model {
+      get urlRead() {
+        return `https://my-json-server.typicode.com/eduard4ck/gue/questions`;
+      }
+
+      get urlWrite() {
+        return `http://intensive-ecmascript-server-srmhvdwcks.now.sh/stats/oO`;
+      }
+    }();
+
+    this.model.load(gameAdapter)
+      .then((data) => this.init(data))
+      .then(() => this.preloader.remove())
+      .catch(console.error);
+  }
+
+  showWelcome() {
     location.hash = Url.WELCOME;
   }
 
-  static showGame() {
+  showGame() {
     location.hash = Url.GAME;
   }
 
-  static showResult({timer, scores, mistakes, place, players, percentage}) {
+  showResult({timer, scores, mistakes, place, players, percentage}) {
     let necessary = {timer, scores, mistakes, place, players, percentage};
     let enc = btoa(JSON.stringify(necessary));
     location.hash = `${Url.STATS}?=${enc}`;
   }
 
-  static init() {
-    this.changeController(this.getIDFromHash(location.hash));
-    window.onhashchange = () => this.changeController(this.getIDFromHash(location.hash));
+  init(data) {
+    this.changePresenter(this.getIDFromHash(location.hash), data);
+    window.onhashchange = () => this.changePresenter(this.getIDFromHash(location.hash), data);
   }
 
-  static getIDFromHash(hash) {
+  getIDFromHash(hash) {
     return hash.replace(`#`, ``);
   }
 
-  static changeController(route = ``) {
+  changePresenter(route = ``, data) {
     let routes = {
-      [Url.WELCOME]: Welcome,
-      [Url.GAME]: Game,
+      [Url.WELCOME]: new Welcome(),
+      [Url.GAME]: new Game(data),
     };
+    console.log(route);
+    console.log(data);
 
     if (typeof routes[route] === `undefined`) {
       let enc = route.split(`stats?=`);
@@ -52,9 +75,10 @@ export default class Router {
       route = ``;
     }
 
-    let Controller = routes[route];
-    new Controller().init();
+    return routes[route].init();
   }
 }
 
-Router.init();
+let router = new Router();
+export default router;
+
