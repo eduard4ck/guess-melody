@@ -9,8 +9,9 @@ import {showBlock} from '../utils';
 
 
 class GamePresenter {
-  constructor() {
+  constructor(data) {
     this.timer = new Timer(this.model);
+    this.data = data;
     this.view = ``;
   }
 
@@ -27,20 +28,21 @@ class GamePresenter {
 
     if (mst.lives < 1 && mst.questions - mst.currentQuestion !== 0) {
       this.timer.clearTimer();
-      return new Result().init(`failView`);
+      return new Result().init(`failTries`);
     }
 
     if (mst.currentQuestion >= mst.questions) {
       statistics.pushState(mst);
       this.timer.clearTimer();
-      return Router.showResult(statistics.now);
+      return Router.showResult(statistics);
     }
 
+    this.model.nextQuestion();
     this.view = this._generateLevel();
     this.view.onPlay = this.onPlay.bind(this);
     this.view.onAnswer = this.onAnswer.bind(this);
     this.view.currentTime = mst.timer;
-    this.model.nextQuestion();
+
     showBlock(this.view.element);
     if (!this.timer.intervalId) this.timer.init();
   }
@@ -74,7 +76,15 @@ class GamePresenter {
   }
 
   _generateLevel() {
-    return this.model.getSomeScreen(ArtistView, GenreView);
+    let questionNumber = this.model.state.currentQuestion - 1;
+    let screenData = this.data[questionNumber];
+    // console.log(screenData.answers.map((el) => el.genre));
+
+    let ScreenView;
+    if (screenData.type === `genre`) ScreenView = GenreView;
+    if (screenData.type === `artist`) ScreenView = ArtistView;
+
+    return this.model.getSomeScreen(ScreenView, screenData);
   }
 
   _getSongObject(div) {

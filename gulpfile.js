@@ -126,7 +126,7 @@ function clean() {
 
 gulp.task(`test`, function () {
   return gulp
-    .src([`src/js/**/*.test.js`])
+    .src([`src/test/**/*.test.js`])
     .pipe(rollup({
       plugins: [
         commonjs()           // Сообщает Rollup, что модули можно загружать из node_modules

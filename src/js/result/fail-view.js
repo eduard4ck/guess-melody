@@ -1,4 +1,4 @@
-import View from '../view';
+import View from '../abstract';
 import logo from '../common/logo';
 
 export default class FailView extends View {
