@@ -34,7 +34,7 @@ class GamePresenter {
     if (mst.currentQuestion >= mst.questions) {
       statistics.pushState(mst);
       this.timer.clearTimer();
-      return Router.showResult(statistics.now);
+      return Router.showResult(statistics);
     }
 
     this.model.nextQuestion();
@@ -78,13 +78,13 @@ class GamePresenter {
   _generateLevel() {
     let questionNumber = this.model.state.currentQuestion - 1;
     let screenData = this.data[questionNumber];
+    // console.log(screenData.answers.map((el) => el.genre));
 
     let ScreenView;
     if (screenData.type === `genre`) ScreenView = GenreView;
     if (screenData.type === `artist`) ScreenView = ArtistView;
 
-    return this.model.getSomeScreen1(ScreenView, screenData);
-    // return this.model.getSomeScreen(ArtistView, GenreView);
+    return this.model.getSomeScreen(ScreenView, screenData);
   }
 
   _getSongObject(div) {

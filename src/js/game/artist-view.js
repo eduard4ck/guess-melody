@@ -1,4 +1,4 @@
-import View from '../view';
+import View from '../abstract';
 import mistakes from '../common/module-mistake';
 import audio from "../common/audio";
 

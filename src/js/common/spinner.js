@@ -1,6 +1,6 @@
-import View from '../view';
+import View from '../abstract';
 
-export default class Preloader extends View {
+export default class Spinner extends View {
 
   /**
   * @param {string} container - название класса или тега, в нем появиться прелоадер

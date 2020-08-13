@@ -174,14 +174,6 @@ class SongsData {
       },
     ];
 
-    this.questions = new Map([
-      [`Выберите инди-рок треки`, `Rock`],
-      [`Выберите джазовые треки`, `Jazz`],
-      [`Выберите кантри треки`, `Country`],
-      [`Выберите треки стиля R&B`, `R&B`],
-      [`Выберите музыку электро`, `Electronic`],
-    ]);
-
     this.QuestionType = {
       GENRE: `genre`,
       ARTIST: `artist`

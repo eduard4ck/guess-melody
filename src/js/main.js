@@ -1,8 +1,8 @@
-import Model from './model';
 import Welcome from './welcome/welcome';
 import Game from './game/game';
 import Result from './result/result';
-import Preloader from './common/preloader';
+import {Loader} from './abstract';
+import Spinner from './common/spinner';
 import gameAdapter from './data/game-adapter';
 
 
@@ -16,23 +16,14 @@ const Url = {
 
 class Router {
   constructor() {
-    this.preloader = new Preloader(`body`);
-    this.preloader.show();
+    this.spinner = new Spinner(`body`);
+    this.spinner.show();
 
-    this.model = new class extends Model {
-      get urlRead() {
-        return `https://my-json-server.typicode.com/eduard4ck/gue/questions`;
-      }
-
-      get urlWrite() {
-        return `http://intensive-ecmascript-server-srmhvdwcks.now.sh/stats/oO`;
-      }
-    }();
-
-    this.model.load(gameAdapter)
-      .then((data) => this.init(data))
-      .then(() => this.preloader.remove())
-      .catch(console.error);
+    Loader.loadData(gameAdapter)
+      .then((data) => this.data = data)
+      .then(() => this.init())
+      .catch(() => this.showError())
+      .then(() => this.spinner.remove());
   }
 
   showWelcome() {
@@ -43,28 +34,47 @@ class Router {
     location.hash = Url.GAME;
   }
 
-  showResult({timer, scores, mistakes, place, players, percentage}) {
-    let necessary = {timer, scores, mistakes, place, players, percentage};
-    let enc = btoa(JSON.stringify(necessary));
-    location.hash = `${Url.STATS}?=${enc}`;
+  showResult(statistics) {
+    let {timer, scores, lives, date} = statistics.now;
+    let dataToSend = {timer, scores, lives, date};
+
+    let spinner = new Spinner(`body`);
+    spinner.show();
+    Loader.saveResults(dataToSend, gameAdapter)
+      .then(() => Loader.loadResults())
+      .then((results) => statistics.usersStat = results)
+    .then(() => {
+      let {mistakes, place, players, percentage} = statistics.now;
+      let necessaryData = {timer, scores, mistakes, place, players, percentage};
+      let enc = btoa(JSON.stringify(necessaryData));
+      location.hash = `${Url.STATS}?=${enc}`;
+    })
+    .catch(() => this.showError())
+    .then(() => spinner.remove());
   }
 
-  init(data) {
-    this.changePresenter(this.getIDFromHash(location.hash), data);
-    window.onhashchange = () => this.changePresenter(this.getIDFromHash(location.hash), data);
+  showError() {
+    let errorBox = document.createElement(`div`);
+    errorBox.classList.add(`error-box`);
+    errorBox.textContent = `Эй, кажеться произошла ошибка, повтори попытку позже`;
+    this.spinner.remove();
+    document.body.appendChild(errorBox);
+  }
+
+  init() {
+    this.changePresenter(this.getIDFromHash(location.hash));
+    window.onhashchange = () => this.changePresenter(this.getIDFromHash(location.hash));
   }
 
   getIDFromHash(hash) {
     return hash.replace(`#`, ``);
   }
 
-  changePresenter(route = ``, data) {
+  changePresenter(route = ``) {
     let routes = {
       [Url.WELCOME]: new Welcome(),
-      [Url.GAME]: new Game(data),
+      [Url.GAME]: new Game(this.data),
     };
-    console.log(route);
-    console.log(data);
 
     if (typeof routes[route] === `undefined`) {
       let enc = route.split(`stats?=`);

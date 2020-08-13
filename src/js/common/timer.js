@@ -1,4 +1,4 @@
-import View from '../view';
+import View from '../abstract';
 import Result from '../result/result';
 import {initialState} from '../data/game-data';
 

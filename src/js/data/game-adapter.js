@@ -1,4 +1,4 @@
-import {DefaultAdapter} from '../model';
+import {DefaultAdapter} from '../abstract';
 
 export default new class extends DefaultAdapter {
   preprocess(data) {

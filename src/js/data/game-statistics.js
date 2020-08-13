@@ -3,10 +3,6 @@ import {initialState} from './game-data';
 class GameStatistics {
   constructor() {
     this._initialStatistic = Object.freeze({
-      mistakes: 0,
-      scores: 0,
-      place: 0,
-      percentage: 0,
       statisticAnswers: [],
     });
     this._POINT = {
@@ -16,11 +12,16 @@ class GameStatistics {
       MISTAKE_VALUE: -2
     };
     this._stat = {};
-    this.allPlayersStatistic = [3, 5, 8, 9, 11];
+    this.allPlayersStatistic = [];
   }
 
   get now() {
     return this._stat;
+  }
+
+  set usersStat(data) {
+    this.allPlayersStatistic = data;
+    this._countStats();
   }
 
   pushAnswer(answer, time) {
@@ -30,7 +31,9 @@ class GameStatistics {
   pushState(state) {
     ({timer: this.now.timer, lives: this.now.lives} = state);
     ({questions: this.now.questions, currentQuestion: this.now.currentQuestion} = state);
-    this._countStats();
+    this.now.timer = initialState.timer - this.now.timer;
+    this.now.date = new Date().getTime();
+    this.now.scores = this._countScores();
   }
 
   reset() {
@@ -42,28 +45,30 @@ class GameStatistics {
     let s = this._stat;
 
     let sortedArray = this.allPlayersStatistic.slice();
-    sortedArray.push(this._countScores());
+    let localScores = (`scores` in this.now) ? this.now.scores : this._countScores();
+    sortedArray.push(localScores);
     sortedArray.sort((left, right) => left - right);
 
     let sortedSet = Array.from(new Set(sortedArray));
-    let index = [...sortedSet].findIndex((el) => el === s.scores);
+    let index = [...sortedSet].findIndex((el) => el === localScores);
 
+    s.scores = localScores;
     s.mistakes = initialState.lives - s.lives;
     s.place = sortedSet.length - index;
     s.players = sortedArray.length;
     s.percentage = Math.trunc(index / sortedSet.length * 100);
-
+    return s;
   }
 
   _countScores() {
-    this.now.scores = this.now.statisticAnswers.reduce((acc, el) => {
+    let scores = this.now.statisticAnswers.reduce((acc, el) => {
       acc += el.answer
         ? (el.time < this._POINT.FAST_ANSWER ? this._POINT.MAX_VALUE : this._POINT.MIN_VALUE)
         : this._POINT.MISTAKE_VALUE;
       return acc;
     }, 0);
-    this.now.scores = this.now.scores < 0 ? 0 : this.now.scores; // если очков меньше нуля, ставим ноль
-    return this.now.scores;
+    scores = scores < 0 ? 0 : scores; // если очков меньше нуля, ставим ноль
+    return scores;
   }
 }
 

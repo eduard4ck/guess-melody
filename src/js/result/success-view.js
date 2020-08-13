@@ -1,6 +1,5 @@
-import View from '../view';
+import View from '../abstract';
 import logo from '../common/logo';
-import {initialState} from '../data/game-data';
 import {declension} from '../utils';
 
 export default class SuccessView extends View {
@@ -29,8 +28,7 @@ export default class SuccessView extends View {
     </section>`;
   }
 
-  getStatisticData(timerNow) {
-    let passedTime = initialState.timer - timerNow;
+  getStatisticData(passedTime) {
     this.minNumber = Math.trunc((passedTime) / 60);
     this.secNumber = (passedTime) % 60;
     this.minText = declension(this.minNumber, [`минуту`, `минуты`, `минут`]);
