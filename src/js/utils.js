@@ -1,24 +1,3 @@
-/* Возвращает рандомный элемент
-*/
-const getRandomItem = (array) => {
-  const randomIndex = Math.floor(Math.random() * array.length);
-  return array[randomIndex];
-};
-
-
-/* Генерирует число от min до max. Можно передать только один аргумент,
-** и будет сгенерировано число от нуля до этого аргумента
-*/
-const getRandomInt = (min, max) => {
-  if (!max) {
-    max = min;
-    min = 0;
-  }
-  min = Math.ceil(min);
-  max = Math.floor(max + 1);
-  return Math.floor(Math.random() * (max - min)) + min;
-};
-
 
 /* Заменяет игровые экраны , не игровые аппендит в пустой .main
 */
@@ -46,4 +25,4 @@ const wordDeclension = (n, textForms) => {
   return textForms[2];
 };
 
-export {getRandomItem, getRandomInt, showBlock, wordDeclension as declension};
+export {showBlock, wordDeclension as declension};

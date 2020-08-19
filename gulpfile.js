@@ -43,7 +43,9 @@ let {src, dest} = require('gulp'),
   rollup = require('gulp-better-rollup'),
   sourcemaps = require('gulp-sourcemaps'),
   mocha = require(`gulp-mocha`),
-  commonjs = require(`rollup-plugin-commonjs`)
+  commonjs = require(`rollup-plugin-commonjs`),
+  babel = require('rollup-plugin-babel'),
+  resolve = require('rollup-plugin-node-resolve')
 
 
 function browserSync(params) {
@@ -86,7 +88,17 @@ function js() {
     .pipe(fileinclude())
     .pipe(sourcemaps.init())
     .pipe(rollup({}, 'iife'))
-    // .pipe(dest(path.build.js))
+    // .pipe(rollup({ // с полифилами, верхнюю строку тогда закомментировать
+    //   plugins: [
+    //     resolve({browser: true}),
+    //     commonjs(),
+    //     babel({
+    //       babelrc: false,
+    //       exclude: `node_modules/**`,
+    //       presets: [`@babel/env`]
+    //     })
+    //   ]
+    // }, `iife`))
     .pipe(uglify())
     .pipe(rename({ extname: ".min.js" }))
     .pipe(sourcemaps.write(''))

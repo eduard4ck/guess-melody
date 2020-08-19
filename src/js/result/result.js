@@ -1,4 +1,4 @@
-import Router from '../main';
+import router from '../main';
 import FailView from './fail-view';
 import SuccessView from './success-view';
 import gameData from '../data/game-data';
@@ -19,7 +19,7 @@ class ResultPresenter {
   }
 
   onReplay() {
-    Router.showWelcome();
+    router.showWelcome();
   }
 
   _getView(screen) {

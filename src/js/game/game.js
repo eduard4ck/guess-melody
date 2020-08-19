@@ -1,4 +1,4 @@
-import Router from '../main';
+import router from '../main';
 import Result from '../result/result';
 import GameModel from './game-model';
 import ArtistView from './artist-view';
@@ -34,7 +34,7 @@ class GamePresenter {
     if (mst.currentQuestion >= mst.questions) {
       statistics.pushState(mst);
       this.timer.clearTimer();
-      return Router.showResult(statistics);
+      return router.showResult(statistics);
     }
 
     this.model.nextQuestion();

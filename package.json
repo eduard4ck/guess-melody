@@ -10,6 +10,8 @@
     "test": "gulp test"
   },
   "devDependencies": {
+    "@babel/core": "7.11.1",
+    "@babel/preset-env": "7.11.0",
     "autoprefixer": "9.8.0",
     "babel": "6.23.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
@@ -22,6 +24,7 @@
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-better-rollup": "^4.0.1",
+    "gulp-cli": "^2.3.0",
     "gulp-file-include": "^2.2.2",
     "gulp-imagemin": "^7.1.0",
     "gulp-mocha": "^7.0.2",
@@ -32,7 +35,9 @@
     "gulp-uglify-es": "^2.0.0",
     "register": "0.0.0",
     "rollup": "^2.16.1",
-    "rollup-plugin-commonjs": "^10.1.0"
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "10.1.0",
+    "rollup-plugin-node-resolve": "5.2.0"
   },
   "engines": {
     "node": "12.18"
@@ -43,6 +48,6 @@
     ]
   },
   "dependencies": {
-    "gulp-cli": "^2.3.0"
+    "@babel/polyfill": "7.10.4"
   }
 }

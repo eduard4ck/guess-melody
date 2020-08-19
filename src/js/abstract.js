@@ -58,18 +58,18 @@ class Loader {
     return `48521885`;
   }
 
-  static loadData(adapter = defaultAdapter) {
-    return fetch(`${this.GET_URL}/questions`)
-      .then((resp) => resp.json())
-      .then(adapter.preprocess);
+  static async loadData(adapter = defaultAdapter) {
+    let response = await fetch(`${this.GET_URL}/questions`);
+    let responseData = await response.json();
+    return adapter.preprocess(responseData);
   }
 
-  static loadResults() {
-    return fetch(`${this.GET_URL}/results`)
-      .then((resp) => resp.json());
+  static async loadResults() {
+    let results = await fetch(`${this.GET_URL}/results`);
+    return await results.json();
   }
 
-  static saveResults(data, adapter = defaultAdapter) {
+  static async saveResults(data, adapter = defaultAdapter) {
     data.appid = this.APP_ID;
     data.name = this.DEFAULT_NAME;
 
@@ -80,8 +80,8 @@ class Loader {
       },
       method: `POST`
     };
-    return fetch(this.POST_URL, requestSettings)
-      .then(this.checkStatus);
+    let response = await fetch(this.POST_URL, requestSettings);
+    return this.checkStatus(response);
   }
 
   static checkStatus(resp) {

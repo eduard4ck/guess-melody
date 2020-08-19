@@ -1,6 +1,5 @@
 import {initialState} from '../data/game-data';
 import songsData from '../data/songs-data';
-import {getRandomItem, getRandomInt} from '../utils';
 
 
 export default class GameModel {

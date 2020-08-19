@@ -1,4 +1,4 @@
-import Router from '../main';
+import router from '../main';
 import WelcomeView from './welcome-view';
 import gameData from '../data/game-data';
 import {showBlock} from '../utils';
@@ -16,6 +16,6 @@ export default class WelcomePresenter {
   }
 
   onPlayClick() {
-    Router.showGame();
+    router.showGame();
   }
 }
