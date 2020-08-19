@@ -1,4 +1,4 @@
-import Router from '../main';
+import router from '../main';
 import View from '../abstract';
 import logo from '../common/logo';
 
@@ -25,7 +25,7 @@ export default class WelcomeView extends View {
     this.playButton = this.element.querySelector(`.main-play`);
     this.playButton.addEventListener(`click`, () => this.onPlayClick());
     this.logotype = this.element.querySelector(`.logo`);
-    this.logotype.addEventListener(`click`, Router.showWelcome);
+    this.logotype.addEventListener(`click`, router.showWelcome);
   }
 
   onPlayClick() {}
