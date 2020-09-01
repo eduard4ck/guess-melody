@@ -1,5 +1,5 @@
 import '@babel/polyfill';
 import Router from './application';
 
-let router = new Router();
+const router: Router = new Router();
 export default router;

@@ -1,11 +1,26 @@
+import { SomeObj } from '../interfaces/index';
 import View from '../abstract';
 import logo from '../common/logo';
-import {declension} from '../utils';
+import { declension } from '../utils';
 
 export default class SuccessView extends View {
-  constructor(screenData) {
+  title: string
+  scores: number
+  mistakes: number
+  place: number
+  players: number
+  percentage: number
+  minNumber!: number
+  secNumber!: number
+  minText!: string
+  secText!: string
+  ball!: string
+  oshibok!: string
+  logotype!: Element | null
+  retryText!: Element | null
+
+  constructor(screenData: SomeObj) {
     super();
-    console.log(screenData);
     this.title = screenData.title;
     this.scores = screenData.scores;
     this.mistakes = screenData.mistakes;
@@ -15,7 +30,7 @@ export default class SuccessView extends View {
     this.getStatisticData(screenData.timer);
   }
 
-  get template() {
+  get template(): string {
     return `
     <section class="main main--result">
       ${logo()}
@@ -29,7 +44,7 @@ export default class SuccessView extends View {
     </section>`;
   }
 
-  getStatisticData(passedTime) {
+  getStatisticData(passedTime: number): void {
     this.minNumber = Math.trunc((passedTime) / 60);
     this.secNumber = (passedTime) % 60;
     this.minText = declension(this.minNumber, [`минуту`, `минуты`, `минут`]);
@@ -38,12 +53,13 @@ export default class SuccessView extends View {
     this.oshibok = declension(this.mistakes, [`ошибку`, `ошибки`, `ошибок`]);
   }
 
-  bind() {
+  bind(): void {
     this.logotype = this.element.querySelector(`.logo`);
     this.retryText = this.element.querySelector(`.main-replay`);
-    this.logotype.addEventListener(`click`, this.onReplay);
-    this.retryText.addEventListener(`click`, this.onReplay);
+    this.logotype?.addEventListener(`click`, this.onReplay);
+    this.retryText?.addEventListener(`click`, this.onReplay);
   }
 
-  onReplay() {}
+  onReplay(): void { }
 }
+
