@@ -28,9 +28,9 @@ export default class WelcomeView extends View {
   }
 
   bind(): void {
-    this.playButton = this.element.querySelector(`.main-play`);
+    this.playButton = this.element?.querySelector(`.main-play`);
     this.playButton?.addEventListener(`click`, () => this.onPlayClick());
-    this.logotype = this.element.querySelector(`.logo`);
+    this.logotype = this.element?.querySelector(`.logo`);
     this.logotype?.addEventListener(`click`, router.showWelcome);
   }
 

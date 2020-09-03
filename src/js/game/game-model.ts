@@ -1,4 +1,4 @@
-import { SomeObj, IClass } from '../interfaces/index';
+import { SomeObj } from '../interfaces/index';
 import { initialState } from '../data/game-data';
 
 
@@ -31,7 +31,7 @@ export default class GameModel {
     return Object.assign(this.state, initialState);
   }
 
-  getSomeScreen(ScreenView: IClass, data: SomeObj): SomeObj { // && указать что return экземпляр ScreenView
+  getSomeScreen<T>(ScreenView: { new(arg: SomeObj): T }, data: SomeObj): T {
     data.lives = this.state.lives;
     return new ScreenView(data);
   }

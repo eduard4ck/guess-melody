@@ -12,7 +12,5 @@ Thumbs.db
 *.log*
 
 # Папка с собранными файлами проекта
-package-lock.json
 node_modules/
 build/
-mp3/

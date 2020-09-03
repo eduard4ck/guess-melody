@@ -1,6 +1,5 @@
 import { ServerData, SomeObj } from './interfaces/index';
 
-
 abstract class AbstractView {
   abstract get template(): string
   private _element!: HTMLElement
@@ -15,7 +14,7 @@ abstract class AbstractView {
 
   bind(): void { }
 
-  render() {
+  render(): any {
     const div = document.createElement(`div`);
     div.innerHTML = this.template.trim();
     return div.firstChild;
@@ -35,7 +34,7 @@ const defaultAdapter = new class extends DefaultAdapter { }();
 
 class Loader {
   static get GET_URL(): string {
-    return `https://my-json-server.typicode.com/eduard4ck/gue`;
+    return `https://raw.githubusercontent.com/Mriox/guess-melody/dev/src/js/data`;
   }
 
   static get POST_URL(): string {
@@ -51,13 +50,13 @@ class Loader {
   }
 
   static async loadData(adapter: DefaultAdapter = defaultAdapter): Promise<ServerData> {
-    const response = await fetch(`${this.GET_URL}/questions`);
+    const response = await fetch(`${this.GET_URL}/server-questions.json`);
     const responseData = await response.json();
     return adapter.preprocess(responseData);
   }
 
   static async loadResults(): Promise<Array<number>> {
-    const results = await fetch(`${this.GET_URL}/results`);
+    const results = await fetch(`${this.GET_URL}/server-results.json`);
     return await results.json();
   }
 
@@ -85,11 +84,9 @@ class Loader {
   }
 }
 
-
-Object.prototype.parse = function () {
+Object.prototype.clon = function () {
   return JSON.parse(JSON.stringify(this));
 };
-
 
 export { AbstractView as default, DefaultAdapter, Loader };
 

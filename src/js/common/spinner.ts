@@ -2,7 +2,7 @@ import View from '../abstract';
 
 export default class Spinner extends View {
   container: string
-  containerBox: HTMLElement // any
+  containerBox!: HTMLElement | null
 
   /**
   * @param {string} container - название класса или тега, в нем появиться прелоадер
@@ -106,13 +106,13 @@ export default class Spinner extends View {
 
   show(): void {
     this.containerBox = document.querySelector(this.container);
-    this.containerBox.classList.add(`container-temp`);
-    this.containerBox.appendChild(this.element);
+    this.containerBox?.classList.add(`container-temp`);
+    this.containerBox?.appendChild(this.element);
   }
 
   remove(): void {
-    this.containerBox.classList.remove(`container-temp`);
-    this.containerBox.querySelector(`.preloader-box`).remove();
+    this.containerBox?.classList.remove(`container-temp`);
+    this.containerBox?.querySelector(`.preloader-box`)?.remove();
   }
 }
 

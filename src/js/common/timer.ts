@@ -47,9 +47,9 @@ class TimerView extends View {
   }
 
   bind() {
-    this.min = this.element.querySelector(`div .timer-value-mins`);
-    this.sec = this.element.querySelector(`div .timer-value-secs`);
-    this.svgCircle = this.element.querySelector(`svg.timer circle`);
+    this.min = this.element?.querySelector(`div .timer-value-mins`);
+    this.sec = this.element?.querySelector(`div .timer-value-secs`);
+    this.svgCircle = this.element?.querySelector(`svg.timer circle`);
   }
 }
 

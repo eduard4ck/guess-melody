@@ -12,15 +12,15 @@ import { showBlock } from '../utils';
 class GamePresenter {
   data: ServerData
   timer: Timer
-  view: GenreView | ArtistView
-  private _model: SomeObj //  указать что это экземпляр класса GameModel
+  view!: GenreView | ArtistView
+  private _model!: SomeObj
 
   constructor(data: ServerData) {
     this.timer = new Timer(this.model);
     this.data = data;
   }
 
-  get model(): SomeObj | void {
+  get model(): SomeObj {
     if (this._model) return this._model;
     this._model = new GameModel();
     statistics.reset();
@@ -52,7 +52,7 @@ class GamePresenter {
   }
 
   onAnswer(evt: SomeObj): void {
-    const isAnswerTrue: boolean = this.view.checkValidAnswer(evt);
+    const isAnswerTrue: boolean | void = this.view.checkValidAnswer(evt);
     if (typeof isAnswerTrue === `undefined`) return;
     statistics.pushAnswer(isAnswerTrue, this.view.currentTime - this.model.state.timer);
     this.model.setLives(isAnswerTrue);
@@ -79,7 +79,7 @@ class GamePresenter {
     }
   }
 
-  private _generateLevel(): SomeObj {
+  private _generateLevel(): GenreView | ArtistView {
     const questionNumber = this.model.state.currentQuestion - 1;
     const screenData = this.data[questionNumber];
 
@@ -90,7 +90,7 @@ class GamePresenter {
     return this.model.getSomeScreen(ScreenView, screenData);
   }
 
-  _getSongObject(div: HTMLElement): SomeObj {
+  _getSongObject(div: Element): SomeObj {
     const that = this;
     return {
       audio: div.querySelector(`audio`),

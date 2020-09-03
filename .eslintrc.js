@@ -4,10 +4,10 @@ module.exports = {
     `plugin:@typescript-eslint/recommended` // Uses the recommended rules from the @typescript-eslint/eslint-plugin
   ],
   parserOptions: {
-    ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
-    sourceType: `module` // Allows for the use of imports
+    ecmaVersion: 2018, 
+    sourceType: `module` 
   },
-  ignorePatterns: ['src/js/**/*.js ', 'build/js/**/*.js'],
+  ignorePatterns: ['*.js', 'src/js/**/*.js ', 'build/js/**/*.js'],
   rules: {
     'no-cond-assign': `error`,
     'no-irregular-whitespace': `error`,
@@ -90,7 +90,7 @@ module.exports = {
       SwitchCase: 1,
       // continuation indent
       VariableDeclarator: 1, // indent is multiplier * indent = 1 * 2
-      MemberExpression: `off`, // https://github.com/htmlacademy/eslint-config-htmlacademy/issues/35
+      MemberExpression: `off`,
       FunctionDeclaration: { parameters: 2 },
       FunctionExpression: { parameters: 2 },
       CallExpression: { arguments: 2 }

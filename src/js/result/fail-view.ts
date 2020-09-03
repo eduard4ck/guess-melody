@@ -25,8 +25,8 @@ export default class FailView extends View {
   }
 
   bind(): void {
-    this.logotype = this.element.querySelector(`.logo`);
-    this.retryText = this.element.querySelector(`.main-replay`);
+    this.logotype = this.element?.querySelector(`.logo`);
+    this.retryText = this.element?.querySelector(`.main-replay`);
     this.logotype?.addEventListener(`click`, this.onReplay);
     this.retryText?.addEventListener(`click`, this.onReplay);
   }

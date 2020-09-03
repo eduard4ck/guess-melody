@@ -11,8 +11,10 @@ export default class ViewLevelArtist extends View {
   lives: number
   form!: Element | null
   playerWrapper!: Element | null
-  playerDivs: HTMLElement
-  allPlayButtons: HTMLElement
+  playerDivs!: NodeListOf<HTMLElement> | null
+  allPlayButtons!: NodeListOf<Element> | null
+  currentTime!: number
+  _playingSong!: SomeObj | null
 
   constructor(screenData: SomeObj) {
     super();
@@ -55,15 +57,15 @@ export default class ViewLevelArtist extends View {
   }
 
   bind(): void {
-    this.form = this.element.querySelector(`.main-list`);
-    this.playerWrapper = this.element.querySelector(`.player-wrapper`);
-    this.playerDivs = this.element.querySelectorAll(`.player`);
-    this.allPlayButtons = this.element.querySelectorAll(`.player-control`);
+    this.form = this.element?.querySelector(`.main-list`);
+    this.playerWrapper = this.element?.querySelector(`.player-wrapper`);
+    this.playerDivs = this.element?.querySelectorAll(`.player`);
+    this.allPlayButtons = this.element?.querySelectorAll(`.player-control`);
     this.form?.addEventListener(`click`, (evt: SomeObj) => this.onAnswer(evt));
     this.playerWrapper?.addEventListener(`click`, (evt: SomeObj) => this.onPlay(evt));
   }
 
-  onAnswer(): void { }
-  onPlay(): void { }
+  onAnswer(evt: SomeObj): void { }
+  onPlay(evt: SomeObj): void { }
 }
 

@@ -16,7 +16,7 @@ class ResultPresenter {
   }
 
   init(screen?: 'failTime' | 'failTries'): void {
-    this.view = this.view ? this.view : this._getView(screen);
+    this.view = screen ? this._getView(screen) : this.view;
     this.view.onReplay = this.onReplay;
     showBlock(this.view.element);
   }

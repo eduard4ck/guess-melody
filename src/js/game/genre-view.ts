@@ -10,10 +10,12 @@ export default class ViewLevelGenre extends View {
   genre: string
   lives: number
   form!: Element | null
-  playerDivs!: NodeListOf<Element> | null
+  playerDivs!: NodeListOf<HTMLElement> | null
   allPlayButtons!: NodeListOf<Element> | null
   musicNotes!: NodeListOf<Element> | null
-  answerButton!: Element | null
+  answerButton!: HTMLElement | null
+  currentTime!: number
+  _playingSong!: SomeObj | null
 
   constructor(screenData: SomeObj) {
     super();
@@ -50,11 +52,11 @@ export default class ViewLevelGenre extends View {
 
   checkValidAnswer(evt: SomeObj): boolean {
     evt.preventDefault();
-    const checkedSongs = [...this.musicNotes].filter((it) => it.checked);
+    const checkedSongs = [...this.musicNotes].filter((it: SomeObj) => it.checked);
     const genredSongs = this.songs.filter((song) => song.genre === this.genre);
     const selectedSongs = this.songs
       .filter((song) => checkedSongs
-        .some((it) => it.value.endsWith(song.value)));
+        .some((it: SomeObj) => it.value.endsWith(song.value)));
     if (genredSongs.length !== selectedSongs.length) return false;
 
     const isAllSongsTrue = genredSongs
@@ -65,24 +67,24 @@ export default class ViewLevelGenre extends View {
 
   onCheck(target: SomeObj): void {
     if (target.type === `checkbox` && target.name === `answer`) {
-      const isSelectedNote = [...this.musicNotes].some((it) => it.checked);
+      const isSelectedNote = [...this.musicNotes].some((it: SomeObj) => it.checked);
       this.answerButton.disabled = isSelectedNote ? false : true;
     }
   }
 
   bind(): void {
-    this.form = this.element.querySelector(`.genre`);
-    this.playerDivs = this.element.querySelectorAll(`.player`);
-    this.allPlayButtons = this.element.querySelectorAll(`.player-control`);
-    this.musicNotes = this.element.querySelectorAll(`.genre input[name="answer"]`);
-    this.answerButton = this.element.querySelector(`button.genre-answer-send`);
+    this.form = this.element?.querySelector(`.genre`);
+    this.playerDivs = this.element?.querySelectorAll(`.player`);
+    this.allPlayButtons = this.element?.querySelectorAll(`.player-control`);
+    this.musicNotes = this.element?.querySelectorAll(`.genre input[name="answer"]`);
+    this.answerButton = this.element?.querySelector(`button.genre-answer-send`);
 
     this.form?.addEventListener(`click`, (evt: SomeObj) => this.onCheck(evt.target));
     this.form?.addEventListener(`click`, (evt: SomeObj) => this.onPlay(evt));
     this.answerButton?.addEventListener(`click`, (evt: SomeObj) => this.onAnswer(evt));
   }
 
-  onPlay(): void { }
-  onAnswer(): void { }
+  onPlay(evt: SomeObj): void { }
+  onAnswer(evt: SomeObj): void { }
 }
 

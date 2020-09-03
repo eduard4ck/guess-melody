@@ -16,7 +16,7 @@ const showBlock = (section: HTMLElement): Element | void => {
  * Склонение слов в правильную форму, например 1 минута, 2 минуты, 5 минут
  * Принимает число, и массив из трех форм ['минута', 'минуты', 'минут']
  * @param {number} n
- * @param {Array} textForms
+ * @param {Array<string>} textForms
  * @return {string}
  * @example wordDeclension(5, ['минута', 'минуты', 'минут']) => 'минут'
  */

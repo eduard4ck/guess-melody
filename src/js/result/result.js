@@ -14,6 +14,7 @@ class ResultPresenter {
 
   init(screen) {
     this.view = this.view ? this.view : this._getView(screen);
+    console.log(this.view);
     this.view.onReplay = this.onReplay;
     showBlock(this.view.element);
   }

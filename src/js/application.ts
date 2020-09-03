@@ -7,7 +7,7 @@ import Spinner from './common/spinner';
 import gameAdapter from './data/game-adapter';
 
 
-enum Url {
+const enum Url {
   WELCOME = ``,
   GAME = `game`,
   STATS = `stats`,
@@ -15,7 +15,7 @@ enum Url {
 
 export default class Router {
 
-  data: ServerData // !
+  data!: ServerData
   spinner: Spinner
 
   constructor() {
@@ -84,7 +84,7 @@ export default class Router {
     return hash.replace(`#`, ``);
   }
 
-  changePresenter(route = ``): void {
+  changePresenter(route: string = Url.WELCOME): void {
     const routes: SomeObj = {
       [Url.WELCOME]: new Welcome(),
       [Url.GAME]: new Game(this.data),
@@ -96,9 +96,10 @@ export default class Router {
         const dec = JSON.parse(atob(enc[1]));
         return new Result(dec).init();
       }
-      route = ``;
+      route = Url.WELCOME;
     }
 
     return routes[route].init();
   }
 }
+
