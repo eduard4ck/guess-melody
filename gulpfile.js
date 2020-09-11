@@ -46,9 +46,12 @@ let {src, dest} = require('gulp'),
   commonjs = require(`rollup-plugin-commonjs`),
   babel = require('rollup-plugin-babel'),
   resolve = require('rollup-plugin-node-resolve')
+  browserify = require(`browserify`),
+  vinylsource = require(`vinyl-source-stream`),
+  tsify = require(`tsify`);
 
 
-function browserSync(params) {
+function browserSync() {
   browsersync.init({
     server: {
       baseDir: "./" + projectFolder + "/"
@@ -147,6 +150,19 @@ gulp.task(`test`, function () {
     .pipe(mocha({reporter: `spec`}))
 });
 
+gulp.task(`typescript`, function () {
+  return browserify({
+      basedir: `./src/js/`,
+      debug: true,
+      entries: [`main.ts`],
+      cache: {},
+      packageCache: {}
+    })
+    .plugin(tsify)
+    .bundle()
+    .pipe(vinylsource(`main.js`))
+    .pipe(gulp.dest(`build/js`));
+});
 
 let build = gulp.series(clean, gulp.parallel(js, css, html, images, music))
 let watch = gulp.parallel(build, watchFiles, browserSync)

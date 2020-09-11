@@ -1,5 +1,4 @@
 import {initialState} from '../data/game-data';
-import songsData from '../data/songs-data';
 
 
 export default class GameModel {
