@@ -88,5 +88,6 @@ Object.prototype.clon = function () {
   return JSON.parse(JSON.stringify(this));
 };
 
+
 export { AbstractView as default, DefaultAdapter, Loader };
 

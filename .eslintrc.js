@@ -154,6 +154,7 @@ module.exports = {
     'no-invalid-this': 'off',
     'consistent-return': 'off',
     'no-nested-ternary': 'off',
-    'no-extend-native': 'off'
+    'no-extend-native': 'off',
+    "@typescript-eslint/no-this-alias": 'off'
   }
 };

@@ -55,7 +55,7 @@ class TimerView extends View {
 
 
 export default class TimerPresenter {
-  intervalId: boolean | number
+  intervalId: number | boolean
   model: SomeObj
   view: TimerView
 

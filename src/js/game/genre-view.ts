@@ -12,8 +12,8 @@ export default class ViewLevelGenre extends View {
   form!: Element | null
   playerDivs!: NodeListOf<HTMLElement> | null
   allPlayButtons!: NodeListOf<Element> | null
-  musicNotes!: NodeListOf<Element> | null
-  answerButton!: HTMLElement | null
+  musicNotes!: Element | null
+  answerButton!: HTMLElement
   currentTime!: number
   _playingSong!: SomeObj | null
 
